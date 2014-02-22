@@ -1,77 +1,42 @@
-<com.sothree.slidinguppanel.SlidingUpPanelLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/sliding_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="bottom">
+    android:layout_gravity="bottom" >
 
-     <include
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/LinearLayout1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        layout="@layout/account_layout" />
-      <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/big_card"
-    android:orientation="vertical"
-    android:padding="6dp" >
+        
+        android:orientation="vertical" >
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:padding="15dp" >
-
-        <ImageView
-            android:id="@+id/ibtnAddSaves"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:adjustViewBounds="false"
-            android:scaleType="center"
-            android:src="@android:drawable/arrow_up_float" />
-
-        <ImageView
-            android:id="@+id/ibtnMinusSaves"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:src="@android:drawable/arrow_down_float" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp" >
-
-        <TextView
-            android:id="@+id/txtVsign"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:text="+"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <EditText
-            android:id="@+id/edtCuantity"
+        <TextSwitcher
+            android:id="@+id/txtSavesTotal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:inputType="numberDecimal" />
+            android:background="@color/bg_blue" >
+        </TextSwitcher>
 
+        <LinearLayout
+            android:id="@+id/inputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/lstTransaction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+        </ListView>
     </LinearLayout>
 
-   
-    <Button
-        android:id="@+id/btnOKInputTransaction"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@android:string/ok" />
-
-</LinearLayout>
-
+    <FrameLayout
+        android:id="@+id/addOperationFrame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>

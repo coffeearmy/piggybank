@@ -11,22 +11,21 @@
         android:layout_height="wrap_content"
         android:padding="15dp" >
 
-        <ImageView
+        <ImageButton
             android:id="@+id/ibtnAddSaves"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:adjustViewBounds="false"
-            android:scaleType="center"
-            android:src="@android:drawable/arrow_up_float" />
+            android:src="@android:drawable/ic_input_add" />
 
-        <ImageView
+        <ImageButton
             android:id="@+id/ibtnMinusSaves"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:adjustViewBounds="true"
-            android:src="@android:drawable/arrow_down_float" />
+            android:src="@android:drawable/button_onoff_indicator_on" />
+
+        
 
     </LinearLayout>
 

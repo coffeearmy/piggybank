@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -144,5 +145,6 @@ public class PiggybankActivity extends ActionBarActivity implements
 		public static Context getContext(){
 			return context;
 		}
+	
 
 }
