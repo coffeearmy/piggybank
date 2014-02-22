@@ -1,4 +1,4 @@
-package main.java.com.coffeearmy.piggybank;
+package com.coffeearmy.piggybank;
 
 import android.content.Context;
 import android.content.res.Configuration;
