@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.coffeearmy.piggybank"
+    android:id="@+id/containerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingTop="8dp" >
+
+    <android.support.v7.widget.GridLayout
+        android:id="@+id/grid_layout_proyect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_vertical|center_horizontal"
+        app:alignmentMode="alignBounds"
+        app:columnCount="4"
+        app:rowCount="2"
+        app:useDefaultMargins="true" >
+
+        <View
+            android:id="@+id/img_icon_1_proyect"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:layout_gravity="left"
+            android:background="@drawable/cicle_button_1"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
+
+        <View
+            android:id="@+id/img_icon_2_proyect"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:layout_gravity="left"
+            android:background="@drawable/cicle_button_1"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
+
+        <View
+            android:id="@+id/img_icon_3_proyect"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:layout_gravity="left"
+            android:background="@drawable/cicle_button_1"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
+
+        <View
+            android:id="@+id/img_icon_4_proyect"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:layout_gravity="left"
+            android:background="@drawable/cicle_button_1"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
+
+        <View
+            android:id="@+id/img_icon_5_proyect"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:layout_gravity="left"
+            android:background="@drawable/cicle_button_1"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
+
+        <View
+            android:id="@+id/img_icon_6_proyect"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:layout_gravity="left"
+            android:background="@drawable/cicle_button_1"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
+
+        <View
+            android:id="@+id/img_icon_7_proyect"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:layout_gravity="left"
+            android:background="@drawable/cicle_button_1"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
+
+        <View
+            android:id="@+id/img_icon_8_proyect"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:layout_gravity="left"
+            android:background="@drawable/cicle_button_1"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
+    </android.support.v7.widget.GridLayout>
+
+    <Button
+        android:id="@+id/btn_account_cancel_dialog2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/grid_layout_proyect"
+        android:text="@android:string/cancel" />
+
+    <Button
+        android:id="@+id/btn_account_ok_dialog2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/grid_layout_proyect"
+        android:text="@android:string/ok" />
+
+</RelativeLayout>

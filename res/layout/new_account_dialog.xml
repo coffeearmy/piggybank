@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ViewSwitcher xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.coffeearmy.piggybank"
+    android:id="@+id/ViewSwitcherAccountDialog"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:id="@+id/containerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="8dp" >
+
+        <EditText
+            android:id="@+id/edt_Name_Account"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="8dp"
+            android:ems="10"
+            android:hint="@string/account_label" >
+
+            <requestFocus />
+        </EditText>
+
+        <EditText
+            android:id="@+id/edt_initial_cuantity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/edt_Name_Account"
+            android:layout_margin="8dp"
+            android:ems="10"
+            android:hint="@string/cuantity_account"
+            android:inputType="numberDecimal" />
+
+        <Button
+            android:id="@+id/btn_cancel_account_dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/edt_initial_cuantity"
+            android:text="@android:string/cancel" />
+
+        <Button
+            android:id="@+id/btn_ok_account_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/btn_cancel_account_dialog"
+            android:layout_toRightOf="@id/btn_cancel_account_dialog"
+            android:text="@android:string/ok" />
+    </RelativeLayout>
+
+    <include
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        layout="@layout/new_account_dialog2" />
+
+</ViewSwitcher>

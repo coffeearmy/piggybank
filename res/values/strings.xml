@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+	
     <string name="app_name">PiggyBank</string>
     <string name="hello">Hello Piggybank!</string>
     <string name="action_settings">Settings</string>
@@ -11,5 +11,17 @@
     </string-array>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <string name="new_operation">New operation</string>
+    <string name="account_label">Set account name:</string>
+    <string name="label_type_account">Select an icon</string>
+    <string name="cuantity_account">Initial cuantity</string>
+     <string name="view_tag">view_tag</string>
+     <string name="account_menu_add">Add</string>
+     <string name="account_menu_subtract">Subtract\n\t\t// TODO Auto-generated method stub\n\t\treturn null;\n\t}\n</string>
+     <string name="account_menu_filter">Filter</string>
+     <string name="account_menu_settings">Settings</string>
+     <item name="account_id" type="id">1</item>
+     <item name="operation_id" type="id">2</item>
+   
 
 </resources>

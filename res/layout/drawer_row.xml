@@ -1,15 +1,34 @@
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@android:id/text1"
+    android:id="@+id/row_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    android:gravity="center_vertical"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:textColor="#000"
-    tools:ignore="SelectableText" />
+    android:layout_marginTop="8dp"
+    android:background="@color/Holo_bg_grey" >
 
-<!-- 	android:background="?android:attr/activatedBackgroundIndicator"
+    <ImageView
+        android:id="@+id/imgv_icon_account"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_centerVertical="true"
+        android:layout_margin="8dp"
+        android:src="@drawable/circle_base_1" />
+
+    <TextView
+        android:id="@+id/txtv_account_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_margin="8dp"
+        android:layout_toRightOf="@id/imgv_icon_account"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:textColor="#000"
+        tools:ignore="SelectableText" />
+
+</RelativeLayout><!--
+     	android:background="?android:attr/activatedBackgroundIndicator"
 	android:textAppearance="?android:attr/textAppearanceListItemSmall"
-		android:minHeight="?android:attr/listPreferredItemHeightSmall" -->
+		android:minHeight="?android:attr/listPreferredItemHeightSmall"
+-->
