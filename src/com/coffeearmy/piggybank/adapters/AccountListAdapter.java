@@ -5,9 +5,12 @@ import java.util.List;
 import com.coffeearmy.piggybank.Account;
 import com.coffeearmy.piggybank.PiggybankActivity;
 import com.coffeearmy.piggybank.R;
+import com.coffeearmy.piggybank.view.CustomCheckIcon;
+import com.coffeearmy.piggybank.view.CustomIcon;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +25,7 @@ public class AccountListAdapter extends ArrayAdapter<Account> {
 
 	  static class ViewHolder {
 	    public TextView text;
-	    public ImageView image;
+	    public CustomIcon icon;
 	  }
 
 	public AccountListAdapter(Context context, int resource,
@@ -42,7 +45,7 @@ public class AccountListAdapter extends ArrayAdapter<Account> {
 	      // configure view holder
 	      ViewHolder viewHolder = new ViewHolder();
 	      viewHolder.text = (TextView) rowView.findViewById(R.id.txtv_account_name);
-	      viewHolder.image = (ImageView) rowView
+	      viewHolder.icon = (CustomIcon) rowView
 	          .findViewById(R.id.imgv_icon_account);
 	      rowView.setTag(viewHolder);
 	    }
@@ -52,12 +55,19 @@ public class AccountListAdapter extends ArrayAdapter<Account> {
 	    Account account = items.get(position);
 	    
 	    holder.text.setText(account.getName());
-	       
-	    holder.image.setImageResource(R.drawable.cicle_button_1);
+	    
+	    //Create custom icon 
+	    holder.icon.setStyle(account.getIcon());
 	    rowView.setTag(R.id.account_id, account.getId());
 	  
 
 	    return rowView;
 	  }
+	
+	public void changeDataSet( List<Account> list){
+		items.clear();
+		items.addAll(list);
+		notifyDataSetChanged();
+	}
 
 }

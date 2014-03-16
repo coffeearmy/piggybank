@@ -1,0 +1,40 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/row_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp" >
+  <com.coffeearmy.piggybank.view.CustomIcon
+                android:id="@+id/imgv_icon_operation"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+      			android:layout_margin="8dp" />
+
+    <TextView
+        android:id="@+id/txtv_operation_money"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="8dp"
+        android:layout_toRightOf="@+id/txtv_operation_date"
+        android:gravity="right"
+        android:text="34535"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#000"
+        tools:ignore="SelectableText" />
+
+    <TextView
+        android:id="@+id/txtv_operation_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="8dp"
+        android:layout_toRightOf="@id/imgv_icon_operation"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/second_grey"
+        android:textSize="12sp" />
+
+</RelativeLayout>

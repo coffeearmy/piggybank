@@ -3,23 +3,18 @@ package com.coffeearmy.piggybank.data;
 import java.util.Date;
 import java.util.List;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.database.Cursor;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
 import com.coffeearmy.piggybank.Account;
 import com.coffeearmy.piggybank.AccountDao;
 import com.coffeearmy.piggybank.Operation;
-import com.coffeearmy.piggybank.PiggybankActivity;
-import com.coffeearmy.piggybank.R;
-import com.coffeearmy.piggybank.fragments.NewAccountFragment;
-import com.coffeearmy.piggybank.fragments.NewOperationFragment;
+import com.coffeearmy.piggybank.auxiliar.Constant;
+import com.coffeearmy.piggybank.fragments.AccountDialog;
+import com.coffeearmy.piggybank.fragments.AccountFragment;
+import com.coffeearmy.piggybank.fragments.DrawerMenu;
+import com.coffeearmy.piggybank.fragments.OperationDialog;
 
 import de.greenrobot.event.EventBus;
 
@@ -46,14 +41,24 @@ public class OperationHandler extends Fragment {
 	
 	public void onEvent(Intent intent){
 		if (intent.getAction().equals(
-				NewAccountFragment.NEW_ACCOUNT_BROADCAST)) {
-			newAccount(intent);
-		} else {
+				AccountDialog.NEW_ACCOUNT_BROADCAST)) {
+			newAccountFromIntent(intent);
+			EventBus.getDefault().post(DrawerMenu.NOTIFY_CHANGE_ACCOUNT_LIST);
+		} else if(intent.getAction().equals(
+				AccountDialog.DELETE_ACCOUNT_BROADCAST)){
+			deleteAccountFromIntent(intent);
+			EventBus.getDefault().post(DrawerMenu.NOTIFY_CHANGE_ACCOUNT_LIST);
+		} else if(intent.getAction().equals(
+				AccountDialog.EDIT_ACCOUNT_BROADCAST)){
+			editAccountFromIntent(intent);
+			EventBus.getDefault().post(DrawerMenu.NOTIFY_CHANGE_ACCOUNT_LIST);
+		}else if(intent.getAction().equals(
+				OperationDialog.ADD_OPERATION_BROADCAST)){
 			newOperation(intent);
+			EventBus.getDefault().post(AccountFragment.NOTIFY_CHANGE_OPERATION_LIST);
 		}
 	}
-		
-		
+	
 	@Override
 	public void onResume() {
 		EventBus.getDefault().register(this);
@@ -65,25 +70,42 @@ public class OperationHandler extends Fragment {
 	public void onPause() {
 		EventBus.getDefault().unregister(this);
 		super.onPause();
-	}
+	}	
+		
 	
 	// Accounts
 	/** Create a new Account from intent */
-	private void newAccount(Intent intent) {
+	private void newAccountFromIntent(Intent intent) {
 
 		String accountName = intent
-				.getStringExtra(NewAccountFragment.ACCOUNT_NAME);
+				.getStringExtra(Constant.ACCOUNT_NAME);
 
-		Double initialCuantity = intent.getDoubleExtra(
-				NewAccountFragment.INITIAL_CUANTITY, 0.);
+		Double initialQuantity = intent.getDoubleExtra(
+				Constant.ACCOUNT_MONEY, 0.);
 
-		int accountType = intent.getIntExtra(NewAccountFragment.TYPE, 0);
-
-		Account newAccount = new Account(null, accountName, initialCuantity,
+		int accountType = intent.getIntExtra(Constant.ACCOUNT_ICON, 0);
+		//The initial quantity will be add or subtract in the operation 
+		Account newAccount = new Account(null, accountName, 0,
 				accountType, 0);
 
 		dataProvider.newAccount(newAccount);
-		storeOperation(newAccount, initialCuantity, true, 0);
+		storeOperation(newAccount, initialQuantity, true, 0);
+	}
+	
+	private void editAccountFromIntent(Intent intent) {
+		Long accountID = intent.getLongExtra(Constant.ACCOUNT_ID, 0);
+		Account account =getAccount(accountID);
+		if(account!=null){
+			account.setName(intent.getStringExtra(Constant.ACCOUNT_NAME));
+			account.setIcon(intent.getIntExtra(Constant.ACCOUNT_ICON, 0));
+			modifyAccount(account);
+		}		
+	}
+
+	private void deleteAccountFromIntent(Intent intent) {		
+		Long accountID = intent.getLongExtra(Constant.ACCOUNT_ID, 0);
+		deleteAccount(getAccount(accountID));	
+		///TODO redraw the list 
 	}
 
 	/** Get an account from account ID */
@@ -138,14 +160,14 @@ public class OperationHandler extends Fragment {
 	// Operations
 	private void newOperation(Intent intent) {
 		Account account = getAccount(intent.getLongExtra(
-				NewOperationFragment.ACCOUNT_ID, -1));
+				Constant.ACCOUNT_ID, -1));
 		storeOperation(account,
-				intent.getDoubleExtra(NewOperationFragment.CUANTITY, 0.),
-				intent.getBooleanExtra(NewOperationFragment.OP_SIGN, true),
-				intent.getIntExtra(NewOperationFragment.TYPE, 0));
+				intent.getDoubleExtra(Constant.OPERATION_MONEY, 0.),
+				intent.getBooleanExtra(Constant.OPERATION_SING, true),
+				intent.getIntExtra(Constant.OPERATION_ICON, 0));
 	}
 
-	public Cursor getOperationsFromAcount(Account account) {
+	public Cursor getOperationsFromAcountCursor(Account account) {
 		dataProvider.getOperations(account);
 		return null;
 	}
@@ -154,11 +176,21 @@ public class OperationHandler extends Fragment {
 		return dataProvider.getOperationsList(account);
 	}
 
-	public void storeOperation(Account account, Double cuantity, Boolean sign,
+	public void storeOperation(Account account, Double quantity, Boolean sign,
 			int type) {
-		int intsign = sign ? 0 : 1;
-		Operation operation = new Operation(null, intsign, cuantity,
+		int intsign = 0;
+		if(sign){
+			//Add
+			intsign=0;
+			account.setMoney(account.getMoney()+quantity);
+		}else{
+			//Substract
+			intsign=1;
+			account.setMoney(account.getMoney()-quantity);
+		}
+		Operation operation = new Operation(null, intsign, quantity,
 				new Date(), account.getId(), "", type);
+		dataProvider.modifyAcccount(account);
 		dataProvider.newOperation(account, operation);
 
 	}

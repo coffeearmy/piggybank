@@ -21,7 +21,11 @@
     <ListView
         android:id="@+id/lstTransaction"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:divider="@drawable/abc_list_divider_holo_light"
+        android:dividerHeight="1px"
+         android:paddingLeft="8dp"
+            android:paddingRight="8dp" >
     </ListView>
 
 </LinearLayout>

@@ -1,14 +1,20 @@
 package com.coffeearmy.piggybank.adapters;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 import com.coffeearmy.piggybank.Account;
 import com.coffeearmy.piggybank.Operation;
 import com.coffeearmy.piggybank.R;
 import com.coffeearmy.piggybank.adapters.AccountListAdapter.ViewHolder;
+import com.coffeearmy.piggybank.view.CustomCheckIcon;
+import com.coffeearmy.piggybank.view.CustomIcon;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +26,12 @@ public class OperationListAdapter extends ArrayAdapter<Operation> {
 
 	  private final Context context;
 	  private final  List<Operation> items;
+	  private DateFormat mDateFormat;
 	  
 	  static class ViewHolder {
 		    public TextView text;
-		    public ImageView image;
+		    public TextView date;
+		    public CustomIcon icon;
 		  }
 	
 	public OperationListAdapter(Context context, int resource,
@@ -31,6 +39,7 @@ public class OperationListAdapter extends ArrayAdapter<Operation> {
 		super(context, resource, textViewResourceId, objects);
 		this.context = context;
 	    this.items = objects;
+	    mDateFormat= SimpleDateFormat.getDateInstance(DateFormat.LONG, Locale.getDefault());
 	}
 	  
 	
@@ -40,12 +49,13 @@ public class OperationListAdapter extends ArrayAdapter<Operation> {
 	    // reuse views
 	    if (rowView == null) {
 	      LayoutInflater inflater =  ((Activity) context).getLayoutInflater();
-	      rowView = inflater.inflate(R.layout.drawer_row, null);
+	      rowView = inflater.inflate(R.layout.account_row, null);
 	      // configure view holder
 	      ViewHolder viewHolder = new ViewHolder();
-	      viewHolder.text = (TextView) rowView.findViewById(R.id.txtv_account_name);
-	      viewHolder.image = (ImageView) rowView
-	          .findViewById(R.id.imgv_icon_account);
+	      viewHolder.text = (TextView) rowView.findViewById(R.id.txtv_operation_money);
+	      viewHolder.icon = (CustomIcon) rowView
+	          .findViewById(R.id.imgv_icon_operation);
+	      viewHolder.date =(TextView) rowView.findViewById(R.id.txtv_operation_date);
 	      rowView.setTag(viewHolder);
 	    }
 
@@ -61,12 +71,21 @@ public class OperationListAdapter extends ArrayAdapter<Operation> {
 	    	holder.text.setTextColor(context.getResources().getColor(R.color.Holo_red));
 	    }
 	    holder.text.setText(operationLabel);
-	       
-	    holder.image.setImageResource(R.drawable.cicle_button_1);
+	    String formatedDate =mDateFormat.format(operation.getDate());
+	    holder.date.setText(formatedDate);   
+	    
+	    holder.icon.setStyle(operation.getType());
 	    rowView.setTag(R.id.account_id, operation.getId());	  
 
 	    return rowView;
 	  }
+
+
+	public void changeDataSet(List<Operation> opertaionList) {
+		items.clear();
+		items.addAll(opertaionList);
+		notifyDataSetChanged();		
+	}
 
 
 }

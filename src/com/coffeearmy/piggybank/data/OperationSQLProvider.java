@@ -1,5 +1,6 @@
 package com.coffeearmy.piggybank.data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.database.Cursor;
@@ -49,6 +50,11 @@ public class OperationSQLProvider implements OperationsManagerInterface {
 	
 	@Override
 	public Account getAccount(Long id) {
+		return accountDao.load(id);
+	}
+	
+	
+	public Account getAccountSQL(Long id) {
 		QueryBuilder qb = accountDao.queryBuilder();
 		qb.where(Properties.Id.eq(id));
 		Account account = (Account) qb.uniqueOrThrow();
@@ -68,7 +74,7 @@ public class OperationSQLProvider implements OperationsManagerInterface {
 
 	@Override
 	public void modifyAcccount(Account a) {
-		accountDao.insertOrReplace(a);
+		a.update();
 
 	}
 
@@ -82,12 +88,19 @@ public class OperationSQLProvider implements OperationsManagerInterface {
 	}
 	@Override
 	public List<Operation> getOperationsList(Account account) {
-		return account.getOperations();
-	}
+		return operationDao.queryBuilder().where(OperationDao.Properties.AccountId.eq(account.getId()))
+				.orderDesc(OperationDao.Properties.Date)
+				.list();
+		}
 
 	@Override
-	public void newOperation(Account a, Operation o) {
-		operationDao.insertOrReplace(o);
+	public void newOperation(Account account, Operation operation) {
+		//In greenDAO document: ensure the list is cached
+		List<Operation> operationList = getOperationsList(account);
+		operation.setAccount(account);
+		operation.setAccountId(account.getId());
+		operationDao.insert(operation);		
+		operationList.add(operation);		
 	}
 
 	@Override
@@ -107,9 +120,5 @@ public class OperationSQLProvider implements OperationsManagerInterface {
 	public Double getAccountMoney(Account account) {
 		return account.getMoney();
 	}
-
-	
-
-	
 
 }

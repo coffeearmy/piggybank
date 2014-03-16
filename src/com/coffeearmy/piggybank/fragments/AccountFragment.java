@@ -1,17 +1,12 @@
 package com.coffeearmy.piggybank.fragments;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.appcompat.R.bool;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,33 +15,30 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.ViewSwitcher.ViewFactory;
 
 import com.coffeearmy.piggybank.Account;
 import com.coffeearmy.piggybank.Operation;
-import com.coffeearmy.piggybank.OperationDao;
 import com.coffeearmy.piggybank.PiggybankActivity;
 import com.coffeearmy.piggybank.R;
-import com.coffeearmy.piggybank.OperationDao.Properties;
-import com.coffeearmy.piggybank.R.id;
-import com.coffeearmy.piggybank.R.layout;
 import com.coffeearmy.piggybank.adapters.OperationListAdapter;
 import com.coffeearmy.piggybank.data.OperationHandler;
 
+import de.greenrobot.event.EventBus;
 
 public class AccountFragment extends Fragment {
 
 	public static final String ACCOUNT_ID = "account_ID";
+	public static final Object NOTIFY_CHANGE_OPERATION_LIST = "notify_change_operation_list";
 	public static String ACCOUNT_FRAGMENT_TAG = "account_fragment_tag";
 	private ListView mTransactionList;
 	private TextSwitcher mTxtSwitchSaves;
 	private OperationHandler operationHandler;
 
-	private Account account;
-	private long accountID;
+	private Account mAccount;
+	private long mAccountID;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,17 +48,21 @@ public class AccountFragment extends Fragment {
 
 		operationHandler = OperationHandler.getInstance();
 		Bundle bundle = this.getArguments();
-		accountID = bundle.getLong(ACCOUNT_ID);
+		mAccountID = bundle.getLong(ACCOUNT_ID);
 		// Get list items
-		account = operationHandler.getAccount(accountID);
+		mAccount = operationHandler.getAccount(mAccountID);
 		// Get Current saves
-		Double currentMoney = operationHandler.getAccountMoney(account);
+		Double currentMoney = operationHandler.getAccountMoney(mAccount);
 		// Get total saves
-		List<Operation> results = operationHandler.getOperationsFromAccountList(account);
+		List<Operation> results = operationHandler
+				.getOperationsFromAccountList(mAccount);
 		// Setup List
 		mTransactionList = (ListView) result.findViewById(R.id.lstTransaction);
 		// Set Adapter
-		mTransactionList.setAdapter(new OperationListAdapter(PiggybankActivity.getContext(), android.R.layout.simple_list_item_1, 1, results));
+		mTransactionList
+				.setAdapter(new OperationListAdapter(PiggybankActivity
+						.getContext(), android.R.layout.simple_list_item_1, 1,
+						results));
 		// Set total saves
 		mTxtSwitchSaves = (TextSwitcher) result
 				.findViewById(R.id.txtSavesTotal);
@@ -101,14 +97,37 @@ public class AccountFragment extends Fragment {
 
 	@Override
 	public void onPause() {
+		EventBus.getDefault().unregister(this);
 		super.onPause();
 	}
-	
+
 	@Override
 	public void onResume() {
 		// Set Title in the action bar
-		getActivity().setTitle(operationHandler.getAccountName(account));
+		getActivity().setTitle(operationHandler.getAccountName(mAccount));
+		EventBus.getDefault().register(this);
 		super.onResume();
+	}
+
+	public void onEvent(String message) {
+		if (message.equals(NOTIFY_CHANGE_OPERATION_LIST)) {
+			listChanged();
+		}
+	}
+
+	public void listChanged() {
+		// Get list items
+		mAccount = operationHandler.getAccount(mAccountID);
+		// Get Current saves
+		Double currentMoney = operationHandler.getAccountMoney(mAccount);
+		// Set currect Saves
+		mTxtSwitchSaves.setText(currentMoney.toString());
+		// Get total saves
+		List<Operation> operationList = new ArrayList<Operation>();
+		operationList.addAll( operationHandler
+				.getOperationsFromAccountList(mAccount));
+		((OperationListAdapter) mTransactionList.getAdapter())
+				.changeDataSet(operationList);
 	}
 
 	@Override
@@ -133,19 +152,19 @@ public class AccountFragment extends Fragment {
 	}
 
 	private void showNewOperationFragment() {
-		Fragment account = new NewOperationFragment();
-		Bundle args = new Bundle();
-		args.putLong(NewOperationFragment.ACCOUNT_ID, accountID);
-		account.setArguments(args);
-		// Insert the fragment by replacing any existing fragment
-		getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, account, NewOperationFragment.FRAG_NEW_OPERATION_TAG)
-		.addToBackStack(null)
-		.commit();
-				
-		// Highlight the selected item, update the title, and close the drawer		
-		getActivity().setTitle("New operation");
-		
-		
+
+		FragmentTransaction ft = getActivity().getSupportFragmentManager()
+				.beginTransaction();
+		Fragment prev = getActivity().getSupportFragmentManager()
+				.findFragmentByTag(AccountDialog.FRAGMENT_TAG);
+		if (prev != null) {
+			ft.remove(prev);
+		}
+		ft.addToBackStack(null);
+
+		OperationDialog newFragment = OperationDialog.newInstance(1, mAccount);
+		newFragment.show(ft, OperationDialog.FRAGMENT_TAG);
+
 	}
 
 }

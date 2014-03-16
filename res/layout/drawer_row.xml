@@ -1,18 +1,19 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res/com.coffeearmy.piggybank"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/row_container"
+    android:id="@+id/row_container_operation"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:background="@color/Holo_bg_grey" >
+    android:layout_margin="8dp" >
 
-    <ImageView
+    <com.coffeearmy.piggybank.view.CustomIcon
         android:id="@+id/imgv_icon_account"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_centerVertical="true"
         android:layout_margin="8dp"
-        android:src="@drawable/circle_base_1" />
+        app:endColor="#80FF00FF"
+        app:startColor="#FFFF0000" />
 
     <TextView
         android:id="@+id/txtv_account_name"
@@ -22,8 +23,7 @@
         android:layout_margin="8dp"
         android:layout_toRightOf="@id/imgv_icon_account"
         android:gravity="center_vertical"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
+        android:padding="8dp"
         android:textColor="#000"
         tools:ignore="SelectableText" />
 

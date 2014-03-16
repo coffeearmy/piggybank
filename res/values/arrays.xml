@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<array name="icon_bg_values_array">
+	    <item>@array/icon_BG_1</item>
+	    <item>@array/icon_BG_2</item>
+	    <item>@array/icon_BG_3</item>
+	    <item>@array/icon_BG_4</item>
+	    <item>@array/icon_BG_5</item>
+	    <item>@array/icon_BG_6</item>
+	    <item>@array/icon_BG_7</item>
+	    <item>@array/icon_BG_8</item>
+	</array>
+	
+    <array name="icon_BG_1">
+        <item>#FF69D2E7</item>
+        <item>#FFA7DBD8</item>
+    </array>
+    <array name="icon_BG_2">
+        <item>#80FF00FF</item>
+        <item>#FFFF0000</item>        
+    </array>
+    <array name="icon_BG_3">
+        <item>#FFF38630</item>
+        <item>#FFFA6900</item>
+    </array>
+    <array name="icon_BG_4">
+        <item>#FFFE4365</item>
+        <item>#FFFC9D9A</item>
+    </array>
+    <array name="icon_BG_5">
+        <item>#FF00B4CC</item>
+        <item>#FF00DFFC</item>
+    </array>
+    <array name="icon_BG_6">
+        <item>#FFD4EE5E</item>
+        <item>#FFE1EDB9</item>
+    </array>
+    <array name="icon_BG_7">
+        <item>#FFFC913A</item>
+        <item>#FFF9D423</item>
+    </array>
+    <array name="icon_BG_8">
+        <item>#FF5D4157</item>
+        <item>#FFA8CABA</item>
+    </array>
+
+</resources>

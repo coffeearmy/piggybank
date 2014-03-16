@@ -1,60 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ViewSwitcher xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res/com.coffeearmy.piggybank"
-    android:id="@+id/ViewSwitcherAccountDialog"
+    android:id="@+id/containerLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:layout_marginTop="8dp"
+    android:orientation="vertical" >
 
-    <RelativeLayout
-        android:id="@+id/containerLayout"
+    <EditText
+        android:id="@+id/edtNameAccount"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingTop="8dp" >
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="8dp"
+        android:ems="10"
+        android:hint="@string/account_label" >
 
-        <EditText
-            android:id="@+id/edt_Name_Account"
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/edtInitialQuantity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/edtNameAccount"
+        android:layout_margin="8dp"
+        android:ems="10"
+        android:hint="@string/Quantity_account"
+        android:inputType="numberDecimal" />
+
+    <ViewSwitcher
+        android:id="@+id/viewSwitcherAccountDialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edtInitialQuantity"
+        android:fitsSystemWindows="true"
+        android:measureAllChildren="false"
+        android:paddingBottom="8dp" >
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_margin="8dp"
-            android:ems="10"
-            android:hint="@string/account_label" >
+            android:layout_height="wrap_content" >
 
-            <requestFocus />
-        </EditText>
+            <ImageView
+                android:id="@+id/imgIconTag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_action_new_label" />
 
-        <EditText
-            android:id="@+id/edt_initial_cuantity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/edt_Name_Account"
-            android:layout_margin="8dp"
-            android:ems="10"
-            android:hint="@string/cuantity_account"
-            android:inputType="numberDecimal" />
+            <com.coffeearmy.piggybank.view.CustomIcon
+                android:id="@+id/imgSelectTag"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="8dp"
+                android:layout_toRightOf="@id/imgIconTag"
+                app:endColor="#80FF00FF"
+                app:startColor="#FFFF0000" />
 
-        <Button
-            android:id="@+id/btn_cancel_account_dialog"
+            <TextView
+                android:id="@+id/txtvDeleteAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/imgSelectTag"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="8dp"
+                android:paddingRight="8dp"
+                android:text="@string/ic_delete"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/Holo_red" />
+        </RelativeLayout>
+
+        <include
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/edt_initial_cuantity"
-            android:text="@android:string/cancel" />
+            layout="@layout/new_account_dialog2"
+            android:visibility="gone" />
+    </ViewSwitcher>
 
-        <Button
-            android:id="@+id/btn_ok_account_dialog"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/btn_cancel_account_dialog"
-            android:layout_toRightOf="@id/btn_cancel_account_dialog"
-            android:text="@android:string/ok" />
-    </RelativeLayout>
-
-    <include
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        layout="@layout/new_account_dialog2" />
-
-</ViewSwitcher>
+</RelativeLayout>
