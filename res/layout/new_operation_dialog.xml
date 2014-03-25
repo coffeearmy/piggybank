@@ -6,24 +6,73 @@
     android:layout_height="fill_parent"
     android:padding="14dp" >
 
-          <ToggleButton
-              android:id="@+id/tbtnAddSaves"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:src="@android:drawable/ic_input_add"
-              android:text="+"
-              android:textOff="-"
-              android:textOn="+" />
+    <ToggleButton
+        android:id="@+id/tbtnAddSaves"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_input_add"
+        android:text="+"
+        android:textOff="-"
+        android:textOn="+" />
 
-        <EditText
-            android:id="@+id/edtQuantityOperation"
-            android:layout_width="match_parent"
+    <EditText
+        android:id="@+id/edtQuantityOperation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/tbtnAddSaves"
+        android:layout_toRightOf="@id/tbtnAddSaves"
+        android:ems="10"
+        android:hint="0.00"
+        android:inputType="numberDecimal"
+        android:textAppearance="?android:attr/textAppearanceLargeInverse" />
+
+    <ViewSwitcher
+        android:id="@+id/viewSwitcherOperationDialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edtQuantityOperation"
+        android:fitsSystemWindows="true"
+        android:measureAllChildren="false"
+        android:paddingBottom="8dp" >
+
+        <include
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/tbtnAddSaves"
-            android:layout_toRightOf="@id/tbtnAddSaves"
-            android:ems="10"
-            android:hint="0.00"
-            android:inputType="numberDecimal"
-            android:textAppearance="?android:attr/textAppearanceLargeInverse" />
+            layout="@layout/new_operation_dialog2"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <ImageView
+                android:id="@+id/imgIconTag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_action_new_label" />
+
+            <com.coffeearmy.piggybank.view.CustomIcon
+                android:id="@+id/imgSelectOperationTag"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="8dp"
+                android:layout_toRightOf="@id/imgIconTag"
+                />
+
+            <TextView
+                android:id="@+id/txtvDeleteOperation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/imgSelectOperationTag"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="8dp"
+                android:paddingRight="8dp"
+                android:text="@string/ic_delete"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/Holo_red" />
+        </RelativeLayout>
+    </ViewSwitcher>
 
 </RelativeLayout>

@@ -1,34 +1,43 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res/com.coffeearmy.piggybank"
+    xmlns:app="http://schemas.android.com/apk/res/com.coffeearmy.piggybank"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/row_container_operation"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp" >
+    android:layout_margin="8dp"
+    android:minHeight="48dp" >
 
     <com.coffeearmy.piggybank.view.CustomIcon
-        android:id="@+id/imgv_icon_account"
+        android:id="@+id/imgvDrawerIconAccount"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_centerVertical="true"
         android:layout_margin="8dp"
-        app:endColor="#80FF00FF"
-        app:startColor="#FFFF0000" />
+        />
 
     <TextView
-        android:id="@+id/txtv_account_name"
-        android:layout_width="match_parent"
+        android:id="@+id/txtvDrawerAccountName"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_margin="8dp"
-        android:layout_toRightOf="@id/imgv_icon_account"
+        android:layout_toRightOf="@id/imgvDrawerIconAccount"
         android:gravity="center_vertical"
-        android:padding="8dp"
+        android:text="000"
+        android:textColor="#000"
+        tools:ignore="SelectableText" />
+    
+    <TextView
+        android:id="@+id/txtvDrawerAccountMoney"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="8dp"
+        android:layout_toRightOf="@id/txtvDrawerAccountName"
+        android:gravity="center_vertical|right"
+        android:text="0000"
         android:textColor="#000"
         tools:ignore="SelectableText" />
 
-</RelativeLayout><!--
-     	android:background="?android:attr/activatedBackgroundIndicator"
-	android:textAppearance="?android:attr/textAppearanceListItemSmall"
-		android:minHeight="?android:attr/listPreferredItemHeightSmall"
--->
+</RelativeLayout>

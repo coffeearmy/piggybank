@@ -1,14 +1,11 @@
 package com.coffeearmy.piggybank.data;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.coffeearmy.piggybank.Account;
 import com.coffeearmy.piggybank.AccountDao;
-import com.coffeearmy.piggybank.AccountDao.Properties;
 import com.coffeearmy.piggybank.DaoMaster;
 import com.coffeearmy.piggybank.DaoMaster.DevOpenHelper;
 import com.coffeearmy.piggybank.DaoSession;
@@ -16,8 +13,9 @@ import com.coffeearmy.piggybank.Operation;
 import com.coffeearmy.piggybank.OperationDao;
 import com.coffeearmy.piggybank.PiggybankActivity;
 
-import de.greenrobot.dao.query.QueryBuilder;
-
+/** Class accessing the BD implement OperationManagerInterface.java, with GreenDAO
+ *  @see https://github.com/greenrobot/greenDAO
+ */
 public class OperationSQLProvider implements OperationsManagerInterface {
 	
 	private SQLiteDatabase db;
@@ -27,8 +25,8 @@ public class OperationSQLProvider implements OperationsManagerInterface {
 	private OperationDao operationDao;
 
 	public OperationSQLProvider() {
-		//Create Scheema 
-		DevOpenHelper helper = new DaoMaster.DevOpenHelper(PiggybankActivity.getContext(), "notes-db", null);
+		//Create Schema 
+		DevOpenHelper helper = new DaoMaster.DevOpenHelper(PiggybankActivity.getContext(), "notes-db-v2", null);
         db = helper.getWritableDatabase();
         daoMaster = new DaoMaster(db);
         daoSession = daoMaster.newSession();
@@ -36,58 +34,46 @@ public class OperationSQLProvider implements OperationsManagerInterface {
         operationDao= daoSession.getOperationDao();
 	}
 
-	@Override
-	public Cursor getAccounts() {
-		String textColumn = AccountDao.Properties.Name.columnName;
-        String orderBy = textColumn + " COLLATE LOCALIZED ASC";
-        Cursor cursor = db.query(accountDao.getTablename(), accountDao.getAllColumns(), null, null, null, null, orderBy);
-		return cursor;
-	}
+	
 	@Override
 	public List<Account> getAccountList() {
+		daoSession.clear();
 		return accountDao.loadAll();
 	}
 	
 	@Override
 	public Account getAccount(Long id) {
+		accountDao.refresh(accountDao.load(id));
 		return accountDao.load(id);
 	}
 	
-	
-	public Account getAccountSQL(Long id) {
-		QueryBuilder qb = accountDao.queryBuilder();
-		qb.where(Properties.Id.eq(id));
-		Account account = (Account) qb.uniqueOrThrow();
-		return account;
-	}
 
 	@Override
 	public void newAccount(Account a) {
 		accountDao.insertOrReplace(a);
+		
 	}
 
 	@Override
 	public void deleteAccount(Account a) {
+		List<Operation> listOperations = getOperationsList(a);
+		for (Operation o: listOperations){
+			operationDao.delete(o);
+		}
 		accountDao.delete(a);
 
 	}
 
 	@Override
 	public void modifyAcccount(Account a) {
-		a.update();
-
+		accountDao.update(a);	
+		
 	}
 
-	@Override
-	public Cursor getOperations(Account a) {
-		String textColumn = OperationDao.Properties.Date.columnName;
-        String orderBy = textColumn + " COLLATE LOCALIZED ASC";
-        //String select = OperationDao.Properties.AccountId.columnName+"="+a.getId();
-        //Cursor cursor = db.query(operationDao.getTablename(), operationDao.getAllColumns(), select, null, null, null, orderBy);
-		return null;//cursor;
-	}
+	
 	@Override
 	public List<Operation> getOperationsList(Account account) {
+		daoSession.clear();
 		return operationDao.queryBuilder().where(OperationDao.Properties.AccountId.eq(account.getId()))
 				.orderDesc(OperationDao.Properties.Date)
 				.list();
@@ -100,12 +86,14 @@ public class OperationSQLProvider implements OperationsManagerInterface {
 		operation.setAccount(account);
 		operation.setAccountId(account.getId());
 		operationDao.insert(operation);		
-		operationList.add(operation);		
+		operationList.add(operation);	
+		accountDao.update(account);
 	}
 
 	@Override
 	public void modifyOperation(Operation o) {
 		operationDao.insertOrReplace(o);
+		
 	}
 
 	@Override
@@ -113,12 +101,24 @@ public class OperationSQLProvider implements OperationsManagerInterface {
 		operationDao.delete(o);
 	}
 
-	@Override
-	public void createBD() {}
+
+	
+	public List<Operation> getLastOperationList(){
+	 return operationDao.queryBuilder()
+				.orderDesc(OperationDao.Properties.Date)
+				.list();
+		
+	}
 
 	@Override
-	public Double getAccountMoney(Account account) {
-		return account.getMoney();
+	public void deleteOperation(long operationID) {
+		operationDao.deleteByKey(operationID);
+		
+	}
+
+	@Override
+	public Operation getOperation(long operationID) {
+		return operationDao.load(operationID);
 	}
 
 }

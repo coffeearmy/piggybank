@@ -13,7 +13,9 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.coffeearmy.piggybank.data.OperationHandler;
+import com.coffeearmy.piggybank.fragments.AccountFragment;
 import com.coffeearmy.piggybank.fragments.DrawerMenu;
+import com.coffeearmy.piggybank.fragments.OverviewFragment;
 
 public class PiggybankActivity extends ActionBarActivity  {
 	//Context
@@ -35,7 +37,10 @@ public class PiggybankActivity extends ActionBarActivity  {
 		//Add Operation handler Fragment
 		getSupportFragmentManager().beginTransaction().add(new OperationHandler(), OperationHandler.OPERATION_HANDLER_TAG).commit();
 		
-		showDrawerMenu();
+		//Add Overview fragment
+		showOverviewFragment();
+		//Replace the layout inside the drawer layout with Drawer Menu fragment
+		configDrawerMenu();
 		//Set Title
 		mTitle = mDrawerTitle = getTitle();
 		//Get layout drawer 
@@ -74,14 +79,22 @@ public class PiggybankActivity extends ActionBarActivity  {
 		getSupportActionBar().setHomeButtonEnabled(true);
 		
 	}
+	/** Replace the layout fragment in the layout drawer with the DrawerMenu Fragment*/
+	private void configDrawerMenu() {
+
+		// Get the fragment instance
+		Fragment fragment =  DrawerMenu.newInstance();
 	
+		// Insert the fragment by replacing any existing fragment
+		getSupportFragmentManager().beginTransaction()
+				.replace(R.id.left_drawer_container, fragment, DrawerMenu.FRAGMENT_TAG).commit();
+	}
 	
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-	
+	public boolean onOptionsItemSelected(MenuItem item) {	
+		//Show drawer menu
 		if(mDrawerToggle.onOptionsItemSelected(item))
-			return (true);
-		
+			return (true);		
 		return (super.onOptionsItemSelected(item));
 	}
 
@@ -97,27 +110,24 @@ public class PiggybankActivity extends ActionBarActivity  {
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 	
-	
-	private void showDrawerMenu() {
-
-		// Create a new fragment 
-		Fragment fragment =  DrawerMenu.newInstance();
-	
-		// Insert the fragment by replacing any existing fragment
-		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.left_drawer_container, fragment, DrawerMenu.FRAGMENT_TAG).commit();
-
-	}
-
-	//Get Context
+	/** Returns activity context*/
 	public static Context getContext(){
 		return context;
 	}
 	
+	/** Close the menu drawer*/
 	public static void closeDrawer(String name){
 		if(!(name==null)){
 			mTitle = name;
 		}
 		mDrawerLayout.closeDrawer(mLayoutDrawer);
+	}
+	
+	/** Show the Overview Fragment*/
+	private void showOverviewFragment(){
+		Fragment fragment = OverviewFragment.newInstance();
+				
+		getSupportFragmentManager().beginTransaction()
+				.replace(R.id.content_frame, fragment, OverviewFragment.FRAGMENT_TAG).commit();
 	}
 }

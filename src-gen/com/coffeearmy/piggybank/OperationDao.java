@@ -29,12 +29,12 @@ public class OperationDao extends AbstractDao<Operation, Long> {
     */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Operation = new Property(1, int.class, "operation", false, "OPERATION");
+        public final static Property Sign = new Property(1, boolean.class, "sign", false, "SIGN");
         public final static Property Money = new Property(2, double.class, "money", false, "MONEY");
         public final static Property Date = new Property(3, java.util.Date.class, "date", false, "DATE");
         public final static Property AccountId = new Property(4, long.class, "accountId", false, "ACCOUNT_ID");
         public final static Property Description = new Property(5, String.class, "description", false, "DESCRIPTION");
-        public final static Property Type = new Property(6, Integer.class, "type", false, "TYPE");
+        public final static Property Icon = new Property(6, Integer.class, "icon", false, "ICON");
     };
 
     private DaoSession daoSession;
@@ -54,13 +54,13 @@ public class OperationDao extends AbstractDao<Operation, Long> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'OPERATION' (" + //
-                "'_id' INTEGER PRIMARY KEY ," + // 0: id
-                "'OPERATION' INTEGER NOT NULL ," + // 1: operation
+                "'_id' INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
+                "'SIGN' INTEGER NOT NULL ," + // 1: sign
                 "'MONEY' REAL NOT NULL ," + // 2: money
                 "'DATE' INTEGER," + // 3: date
                 "'ACCOUNT_ID' INTEGER NOT NULL ," + // 4: accountId
                 "'DESCRIPTION' TEXT," + // 5: description
-                "'TYPE' INTEGER);"); // 6: type
+                "'ICON' INTEGER);"); // 6: icon
     }
 
     /** Drops the underlying database table. */
@@ -78,7 +78,7 @@ public class OperationDao extends AbstractDao<Operation, Long> {
         if (id != null) {
             stmt.bindLong(1, id);
         }
-        stmt.bindLong(2, entity.getOperation());
+        stmt.bindLong(2, entity.getSign() ? 1l: 0l);
         stmt.bindDouble(3, entity.getMoney());
  
         java.util.Date date = entity.getDate();
@@ -92,9 +92,9 @@ public class OperationDao extends AbstractDao<Operation, Long> {
             stmt.bindString(6, description);
         }
  
-        Integer type = entity.getType();
-        if (type != null) {
-            stmt.bindLong(7, type);
+        Integer icon = entity.getIcon();
+        if (icon != null) {
+            stmt.bindLong(7, icon);
         }
     }
 
@@ -115,12 +115,12 @@ public class OperationDao extends AbstractDao<Operation, Long> {
     public Operation readEntity(Cursor cursor, int offset) {
         Operation entity = new Operation( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.getInt(offset + 1), // operation
+            cursor.getShort(offset + 1) != 0, // sign
             cursor.getDouble(offset + 2), // money
             cursor.isNull(offset + 3) ? null : new java.util.Date(cursor.getLong(offset + 3)), // date
             cursor.getLong(offset + 4), // accountId
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // description
-            cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6) // type
+            cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6) // icon
         );
         return entity;
     }
@@ -129,12 +129,12 @@ public class OperationDao extends AbstractDao<Operation, Long> {
     @Override
     public void readEntity(Cursor cursor, Operation entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setOperation(cursor.getInt(offset + 1));
+        entity.setSign(cursor.getShort(offset + 1) != 0);
         entity.setMoney(cursor.getDouble(offset + 2));
         entity.setDate(cursor.isNull(offset + 3) ? null : new java.util.Date(cursor.getLong(offset + 3)));
         entity.setAccountId(cursor.getLong(offset + 4));
         entity.setDescription(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setType(cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6));
+        entity.setIcon(cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6));
      }
     
     /** @inheritdoc */

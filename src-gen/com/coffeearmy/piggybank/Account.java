@@ -14,8 +14,8 @@ public class Account {
     /** Not-null value. */
     private String name;
     private double money;
-    private Integer Type1;
-    private Integer Icon;
+    private Integer extraType;
+    private Integer icon;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -32,12 +32,12 @@ public class Account {
         this.id = id;
     }
 
-    public Account(Long id, String name, double money, Integer Type1, Integer Icon) {
+    public Account(Long id, String name, double money, Integer extraType, Integer icon) {
         this.id = id;
         this.name = name;
         this.money = money;
-        this.Type1 = Type1;
-        this.Icon = Icon;
+        this.extraType = extraType;
+        this.icon = icon;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -72,20 +72,20 @@ public class Account {
         this.money = money;
     }
 
-    public Integer getType1() {
-        return Type1;
+    public Integer getExtraType() {
+        return extraType;
     }
 
-    public void setType1(Integer Type1) {
-        this.Type1 = Type1;
+    public void setExtraType(Integer extraType) {
+        this.extraType = extraType;
     }
 
     public Integer getIcon() {
-        return Icon;
+        return icon;
     }
 
-    public void setIcon(Integer Icon) {
-        this.Icon = Icon;
+    public void setIcon(Integer icon) {
+        this.icon = icon;
     }
 
     /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */

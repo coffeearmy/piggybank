@@ -17,6 +17,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_margin="4dp"
+            app:numCustomIcon="-1"
             app:numCustomStyle="0" />
 
         <com.coffeearmy.piggybank.view.CustomCheckIcon
@@ -25,6 +26,7 @@
             android:layout_height="30dp"
             android:layout_margin="4dp"
             android:checked="false"
+            app:numCustomIcon="-1"
             app:numCustomStyle="1" />
 
         <com.coffeearmy.piggybank.view.CustomCheckIcon
@@ -33,6 +35,7 @@
             android:layout_height="30dp"
             android:layout_margin="4dp"
             android:checked="false"
+            app:numCustomIcon="-1"
             app:numCustomStyle="2" />
 
         <com.coffeearmy.piggybank.view.CustomCheckIcon
@@ -41,6 +44,7 @@
             android:layout_height="30dp"
             android:layout_margin="4dp"
             android:checked="false"
+            app:numCustomIcon="-1"
             app:numCustomStyle="3"/>
 
         <com.coffeearmy.piggybank.view.CustomCheckIcon
@@ -49,6 +53,7 @@
             android:layout_height="30dp"
             android:layout_margin="4dp"
             android:checked="false"
+            app:numCustomIcon="-1"
             app:numCustomStyle="4"/>
 
         <com.coffeearmy.piggybank.view.CustomCheckIcon
@@ -57,6 +62,7 @@
             android:layout_height="30dp"
             android:layout_margin="4dp"
             android:checked="false"
+            app:numCustomIcon="-1"
             app:numCustomStyle="5" />
 
         <com.coffeearmy.piggybank.view.CustomCheckIcon
@@ -65,6 +71,7 @@
             android:layout_height="30dp"
             android:layout_margin="4dp"
             android:checked="false"
+            app:numCustomIcon="-1"
             app:numCustomStyle="6" />
 
         <com.coffeearmy.piggybank.view.CustomCheckIcon
@@ -73,6 +80,7 @@
             android:layout_height="30dp"
             android:layout_margin="4dp"
             android:checked="false"
+            app:numCustomIcon="-1"
             app:numCustomStyle="7" />
     </RadioGroup>
 

@@ -10,12 +10,12 @@ import de.greenrobot.dao.DaoException;
 public class Operation {
 
     private Long id;
-    private int operation;
+    private boolean sign;
     private double money;
     private java.util.Date date;
     private long accountId;
     private String description;
-    private Integer type;
+    private Integer icon;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -34,14 +34,14 @@ public class Operation {
         this.id = id;
     }
 
-    public Operation(Long id, int operation, double money, java.util.Date date, long accountId, String description, Integer type) {
+    public Operation(Long id, boolean sign, double money, java.util.Date date, long accountId, String description, Integer icon) {
         this.id = id;
-        this.operation = operation;
+        this.sign = sign;
         this.money = money;
         this.date = date;
         this.accountId = accountId;
         this.description = description;
-        this.type = type;
+        this.icon = icon;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -58,12 +58,12 @@ public class Operation {
         this.id = id;
     }
 
-    public int getOperation() {
-        return operation;
+    public boolean getSign() {
+        return sign;
     }
 
-    public void setOperation(int operation) {
-        this.operation = operation;
+    public void setSign(boolean sign) {
+        this.sign = sign;
     }
 
     public double getMoney() {
@@ -98,12 +98,12 @@ public class Operation {
         this.description = description;
     }
 
-    public Integer getType() {
-        return type;
+    public Integer getIcon() {
+        return icon;
     }
 
-    public void setType(Integer type) {
-        this.type = type;
+    public void setIcon(Integer icon) {
+        this.icon = icon;
     }
 
     /** To-one relationship, resolved on first access. */

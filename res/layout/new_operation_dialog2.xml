@@ -1,20 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res/com.coffeearmy.piggybank"
-    android:id="@+id/container"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:id="@+id/containerOperationLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp" >
 
-    <android.support.v7.widget.GridLayout
-        android:id="@+id/GridLayout1"
+    <RadioGroup
+        android:id="@+id/radioGroupOperationIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerInParent="true"
-        app:alignmentMode="alignMargins"
-        app:columnCount="4"
-        app:rowCount="2"
-        app:useDefaultMargins="true" >
-    </android.support.v7.widget.GridLayout>
+        android:orientation="horizontal" >
 
-</RelativeLayout>
+        <com.coffeearmy.piggybank.view.CustomCheckIcon
+            android:id="@+id/radioOp0"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="4dp"
+            app:numCustomIcon="0"
+            app:numCustomStyle="0" />
+
+        <com.coffeearmy.piggybank.view.CustomCheckIcon
+            android:id="@+id/radioOp1"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="4dp"
+            android:checked="false"
+            app:numCustomIcon="1"
+            app:numCustomStyle="1" />
+
+        <com.coffeearmy.piggybank.view.CustomCheckIcon
+            android:id="@+id/radioOp2"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="4dp"
+            android:checked="false"
+            app:numCustomIcon="2"
+            app:numCustomStyle="2" />
+
+        <com.coffeearmy.piggybank.view.CustomCheckIcon
+            android:id="@+id/radioOp3"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="4dp"
+            android:checked="false"
+            app:numCustomIcon="3"
+            app:numCustomStyle="3" />
+
+        <com.coffeearmy.piggybank.view.CustomCheckIcon
+            android:id="@+id/radioOp4"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="4dp"
+            android:checked="false"
+            app:numCustomIcon="4"
+            app:numCustomStyle="4" />
+
+        <com.coffeearmy.piggybank.view.CustomCheckIcon
+            android:id="@+id/radioOp5"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="4dp"
+            android:checked="false"
+            app:numCustomIcon="5"
+            app:numCustomStyle="5" />
+
+        <com.coffeearmy.piggybank.view.CustomCheckIcon
+            android:id="@+id/radioOp6"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="4dp"
+            android:checked="false"
+            app:numCustomIcon="6"
+            app:numCustomStyle="6" />
+
+        <com.coffeearmy.piggybank.view.CustomCheckIcon
+            android:id="@+id/radioOp7"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="4dp"
+            android:checked="false"
+            app:numCustomIcon="7"
+            app:numCustomStyle="7" />
+
+    </RadioGroup>
+
+</HorizontalScrollView>

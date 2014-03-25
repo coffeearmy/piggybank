@@ -22,12 +22,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+/** Array Adapter for listing operations from one account  */
 public class OperationListAdapter extends ArrayAdapter<Operation> {
 
 	  private final Context context;
 	  private final  List<Operation> items;
 	  private DateFormat mDateFormat;
 	  
+	  //ViewHolder pattern
 	  static class ViewHolder {
 		    public TextView text;
 		    public TextView date;
@@ -39,6 +41,7 @@ public class OperationListAdapter extends ArrayAdapter<Operation> {
 		super(context, resource, textViewResourceId, objects);
 		this.context = context;
 	    this.items = objects;
+	    //Date format used in the list
 	    mDateFormat= SimpleDateFormat.getDateInstance(DateFormat.LONG, Locale.getDefault());
 	}
 	  
@@ -46,7 +49,7 @@ public class OperationListAdapter extends ArrayAdapter<Operation> {
 	@Override
 	  public View getView(int position, View convertView, ViewGroup parent) {
 	    View rowView = convertView;
-	    // reuse views
+	    // Reusing Views
 	    if (rowView == null) {
 	      LayoutInflater inflater =  ((Activity) context).getLayoutInflater();
 	      rowView = inflater.inflate(R.layout.account_row, null);
@@ -56,14 +59,18 @@ public class OperationListAdapter extends ArrayAdapter<Operation> {
 	      viewHolder.icon = (CustomIcon) rowView
 	          .findViewById(R.id.imgv_icon_operation);
 	      viewHolder.date =(TextView) rowView.findViewById(R.id.txtv_operation_date);
+	      //Store the viewHolder in the tag of the view
 	      rowView.setTag(viewHolder);
 	    }
 
 	    // fill data
 	    ViewHolder holder = (ViewHolder) rowView.getTag();
 	    Operation operation = items.get(position);
+	    
 	    String operationLabel=Double.toString(operation.getMoney());
-	    if(operation.getOperation()==0){
+	    
+	    //Use red for negative amounts and green for positive amounts
+	    if(operation.getSign()){
 	    	operationLabel="+ "+operationLabel;
 	    	holder.text.setTextColor( context.getResources().getColor(R.color.Holo_green));
 	    }else{
@@ -71,16 +78,20 @@ public class OperationListAdapter extends ArrayAdapter<Operation> {
 	    	holder.text.setTextColor(context.getResources().getColor(R.color.Holo_red));
 	    }
 	    holder.text.setText(operationLabel);
+	    //Format the data with a short date format
 	    String formatedDate =mDateFormat.format(operation.getDate());
 	    holder.date.setText(formatedDate);   
 	    
-	    holder.icon.setStyle(operation.getType());
-	    rowView.setTag(R.id.account_id, operation.getId());	  
-
+	    //Custom Icon from CustomIcon.java
+	    holder.icon.setStyle(operation.getAccount().getIcon(),operation.getIcon());
+	    
+	    //Save IDs from the account and the operation for Edit and Delete operations
+	    rowView.setTag(R.id.account_id, operation.getAccountId());	  
+	    rowView.setTag(R.id.operation_id, operation.getId());
 	    return rowView;
 	  }
 
-
+	/**Change the data of the list with a given Operation List*/
 	public void changeDataSet(List<Operation> opertaionList) {
 		items.clear();
 		items.addAll(opertaionList);

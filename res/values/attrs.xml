@@ -2,15 +2,13 @@
 <resources>
 
     <declare-styleable name="CustomCheckIcon">
-         <attr name="endColor" format="color" />
-         <attr name="startColor" format="color" />
          <attr name="numCustomStyle" format="integer" />   
+         <attr name="numCustomIcon" format="integer" />   
                 
     </declare-styleable>
     <declare-styleable name="CustomIcon">
-         <attr name="endColorBG" format="color" />
-         <attr name="startColorBG" format="color" />    
-         <attr name="numCustomStyleBG" format="integer" />     
+         <attr name="numCustomStyleBG" format="integer" /> 
+         <attr name="numCustomIconBG" format="integer" />     
     </declare-styleable>
 
 </resources>

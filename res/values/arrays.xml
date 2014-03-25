@@ -11,6 +11,7 @@
 	    <item>@array/icon_BG_8</item>
 	</array>
 	
+	
     <array name="icon_BG_1">
         <item>#FF69D2E7</item>
         <item>#FFA7DBD8</item>
@@ -43,5 +44,20 @@
         <item>#FF5D4157</item>
         <item>#FFA8CABA</item>
     </array>
-
+    <array name="icon_op_values_array">
+	    <item>@drawable/ic_op_icon_candy</item>        
+        <item>@drawable/ic_op_icon_car</item>
+        <item>@drawable/ic_op_icon_coffee</item>        
+        <item>@drawable/ic_op_icon_food</item>
+        <item>@drawable/ic_op_icon_fuel</item>        
+        <item>@drawable/ic_op_icon_game</item>
+        <item>@drawable/ic_op_icon_glasses</item>
+        <item>@drawable/ic_op_icon_house</item>        
+        <item>@drawable/ic_op_icon_pill</item>
+        <item>@drawable/ic_op_icon_suitcase</item>        
+        <item>@drawable/ic_op_icon_ticket</item>
+         <item>@drawable/ic_op_icon_water</item>        
+         <item>@drawable/ic_op_icon_world</item>
+    </array>
+    
 </resources>

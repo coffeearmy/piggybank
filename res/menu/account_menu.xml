@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/account_menu_add"
-        android:icon="@android:drawable/ic_input_add"
+        android:icon="@drawable/ic_action_new"
         android:showAsAction="always"
         android:title="@string/account_menu_add"
         app:showAsAction="always">

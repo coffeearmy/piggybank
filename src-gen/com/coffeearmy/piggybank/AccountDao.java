@@ -26,8 +26,8 @@ public class AccountDao extends AbstractDao<Account, Long> {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Name = new Property(1, String.class, "name", false, "NAME");
         public final static Property Money = new Property(2, double.class, "money", false, "MONEY");
-        public final static Property Type1 = new Property(3, Integer.class, "Type1", false, "TYPE1");
-        public final static Property Icon = new Property(4, Integer.class, "Icon", false, "ICON");
+        public final static Property ExtraType = new Property(3, Integer.class, "extraType", false, "EXTRA_TYPE");
+        public final static Property Icon = new Property(4, Integer.class, "icon", false, "ICON");
     };
 
     private DaoSession daoSession;
@@ -46,11 +46,11 @@ public class AccountDao extends AbstractDao<Account, Long> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "'ACCOUNT' (" + //
-                "'_id' INTEGER PRIMARY KEY ," + // 0: id
+                "'_id' INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "'NAME' TEXT NOT NULL ," + // 1: name
                 "'MONEY' REAL NOT NULL ," + // 2: money
-                "'TYPE1' INTEGER," + // 3: Type1
-                "'ICON' INTEGER);"); // 4: Icon
+                "'EXTRA_TYPE' INTEGER," + // 3: extraType
+                "'ICON' INTEGER);"); // 4: icon
     }
 
     /** Drops the underlying database table. */
@@ -71,14 +71,14 @@ public class AccountDao extends AbstractDao<Account, Long> {
         stmt.bindString(2, entity.getName());
         stmt.bindDouble(3, entity.getMoney());
  
-        Integer Type1 = entity.getType1();
-        if (Type1 != null) {
-            stmt.bindLong(4, Type1);
+        Integer extraType = entity.getExtraType();
+        if (extraType != null) {
+            stmt.bindLong(4, extraType);
         }
  
-        Integer Icon = entity.getIcon();
-        if (Icon != null) {
-            stmt.bindLong(5, Icon);
+        Integer icon = entity.getIcon();
+        if (icon != null) {
+            stmt.bindLong(5, icon);
         }
     }
 
@@ -101,8 +101,8 @@ public class AccountDao extends AbstractDao<Account, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getString(offset + 1), // name
             cursor.getDouble(offset + 2), // money
-            cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3), // Type1
-            cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4) // Icon
+            cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3), // extraType
+            cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4) // icon
         );
         return entity;
     }
@@ -113,7 +113,7 @@ public class AccountDao extends AbstractDao<Account, Long> {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setName(cursor.getString(offset + 1));
         entity.setMoney(cursor.getDouble(offset + 2));
-        entity.setType1(cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3));
+        entity.setExtraType(cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3));
         entity.setIcon(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
      }
     
