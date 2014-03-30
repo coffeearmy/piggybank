@@ -10,7 +10,7 @@
         app:showAsAction="always">
     </item>
    
-    <!-- More -->
+    <!-- More 
     <item
         android:id="@+id/a_More"
         android:icon="@drawable/ic_action_overflow"
@@ -33,6 +33,6 @@
                 app:showAsAction="never">
             </item>
         </menu>
-    </item>
+    </item>-->
 
 </menu>

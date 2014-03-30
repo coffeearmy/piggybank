@@ -4,18 +4,22 @@ import java.util.List;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -37,7 +41,9 @@ public class DrawerMenu extends Fragment implements OnItemClickListener,
 	private static DrawerMenu mDrawerMenu;
 	private ListView mDrawerList;
 	private FragmentManager mFragmentManager;
-	private Button mButtonAddPiggybank;
+	
+	private ImageView mImageAddPiggybanck;
+	private TextView mOverviewTextV;
 
 	// Singleton
 	public static DrawerMenu newInstance() {
@@ -59,7 +65,7 @@ public class DrawerMenu extends Fragment implements OnItemClickListener,
 		// Fragment Manager
 		mFragmentManager = getActivity().getSupportFragmentManager();
 		// Get List drawer
-		mDrawerList = (ListView) result.findViewById(R.id.left_drawer);
+		mDrawerList = (ListView) result.findViewById(R.id.list_drawer);
 
 		// Get initial list of accounts
 		OperationHandler opHandler = OperationHandler.getInstance();
@@ -68,20 +74,32 @@ public class DrawerMenu extends Fragment implements OnItemClickListener,
 		// Set adapter
 		mDrawerList.setAdapter(new AccountListAdapter(getActivity(),
 				R.layout.drawer_row, 0, accountsCursor));
-		// Set onclicklistener
-		mButtonAddPiggybank = (Button) result
-				.findViewById(R.id.btn_new_account_drawer_menu);
-		mButtonAddPiggybank.setOnClickListener(new OnClickListener() {
+		// Set onclicklistener		
+		mImageAddPiggybanck = (ImageView) result.findViewById(R.id.imgAddNewAccount);
+		mImageAddPiggybanck.setOnClickListener(new OnClickListener() {			
 			@Override
 			public void onClick(View v) {
-				showNewAccountFragment();
+				showNewAccountFragment();				
 			}
 		});
+		
+		//Set Overview link
+		mOverviewTextV= (TextView) result.findViewById(R.id.txtvOverviewDrawer);
+		mOverviewTextV.setOnClickListener(new OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				showOverviewFragment();		
+			
+			}
+		});
+		
 
 		mDrawerList.setOnItemClickListener(this);
 		mDrawerList.setOnItemLongClickListener(this);
 		return result;
 	}
+
+	
 
 	@Override
 	public void onResume() {
@@ -171,6 +189,22 @@ public class DrawerMenu extends Fragment implements OnItemClickListener,
 		// Highlight the selected item, update the title, and close the drawer
 		mDrawerList.setItemChecked(position, true);
 		PiggybankActivity.closeDrawer(null);
+	}
+	
+	/** Show the Overview fragment, and change the actionbar title to "Overview"*/
+	protected void showOverviewFragment() {
+		Fragment fragment = OverviewFragment.newInstance();
+		
+		FragmentTransaction ft = mFragmentManager.beginTransaction();
+		Fragment prev = mFragmentManager
+				.findFragmentByTag(OverviewFragment.FRAGMENT_TAG);
+		if (prev != null) {
+			ft.remove(prev);
+		}
+		ft.addToBackStack(null);
+		ft.replace(R.id.content_frame, fragment, OverviewFragment.FRAGMENT_TAG).commit();
+		
+		PiggybankActivity.closeDrawer("Overview");
 	}
 
 	// Listeners

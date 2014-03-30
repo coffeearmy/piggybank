@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 import com.coffeearmy.piggybank.data.OperationHandler;
 import com.coffeearmy.piggybank.fragments.AccountFragment;
@@ -22,11 +23,11 @@ public class PiggybankActivity extends ActionBarActivity  {
 	private static Context context;
 	//UI elements
 	private static DrawerLayout mDrawerLayout = null;
-	private ActionBarDrawerToggle mDrawerToggle = null;
+	private static ActionBarDrawerToggle mDrawerToggle = null;
 	//Titles
 	private CharSequence mDrawerTitle;
 	private static CharSequence mTitle;
-	private static FrameLayout mLayoutDrawer;
+	private static RelativeLayout mLayoutDrawer;
 		
 
 	@Override
@@ -44,7 +45,7 @@ public class PiggybankActivity extends ActionBarActivity  {
 		//Set Title
 		mTitle = mDrawerTitle = getTitle();
 		//Get layout drawer 
-		mLayoutDrawer =(FrameLayout) findViewById(R.id.left_drawer_container);
+		mLayoutDrawer =(RelativeLayout) findViewById(R.id.drawerContainer);
 		
 
 		//Set drawer Layout
@@ -121,6 +122,7 @@ public class PiggybankActivity extends ActionBarActivity  {
 			mTitle = name;
 		}
 		mDrawerLayout.closeDrawer(mLayoutDrawer);
+			
 	}
 	
 	/** Show the Overview Fragment*/
@@ -128,6 +130,6 @@ public class PiggybankActivity extends ActionBarActivity  {
 		Fragment fragment = OverviewFragment.newInstance();
 				
 		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.content_frame, fragment, OverviewFragment.FRAGMENT_TAG).commit();
+				.add(R.id.content_frame, fragment, OverviewFragment.FRAGMENT_TAG).commit();
 	}
 }

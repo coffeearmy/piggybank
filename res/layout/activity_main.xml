@@ -13,12 +13,17 @@
 
     <!-- The navigation drawer -->
 
-    <FrameLayout
-        android:id="@+id/left_drawer_container"
+    <RelativeLayout
+        android:id="@+id/drawerContainer"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="@color/Holo_bg_grey" />
-   
+        android:layout_gravity="start" >
+
+        <FrameLayout
+            android:id="@+id/left_drawer_container"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/Holo_bg_grey" />
+    </RelativeLayout>
 
 </android.support.v4.widget.DrawerLayout>

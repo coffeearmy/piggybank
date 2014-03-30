@@ -1,24 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     android:id="@+id/left_drawer_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/Holo_bg_grey"
     android:orientation="vertical" >
 
-     <Button
-            android:id="@+id/btn_new_account_drawer_menu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Add Account" />
+    <ImageView
+        android:id="@+id/imgvLongClick"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="8dp"
+        android:src="@drawable/ic_logo" />
 
-        <ListView
-            android:id="@+id/left_drawer"
-            android:layout_width="240dp"
-            android:layout_height="match_parent"
-            android:choiceMode="singleChoice"
-            android:divider="@drawable/abc_list_divider_holo_light"
-            android:dividerHeight="1px"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp" />
+    <RelativeLayout
+        android:id="@+id/RelativeLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/Holo_letter_grey" >
+
+        <ImageView
+            android:id="@+id/imgAddNewAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentRight="true"
+            android:layout_margin="8dp"
+            android:src="@drawable/ic_action_new" />
+
+        <TextView
+            android:id="@+id/txtvOverviewDrawer"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="8dp"
+            android:layout_toLeftOf="@id/imgAddNewAccount"
+            android:text="Overview"
+            android:textAllCaps="true"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/card_white" />
+
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/list_drawer"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:choiceMode="singleChoice"
+        android:divider="@drawable/abc_list_divider_holo_light"
+        android:dividerHeight="1px"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp" />
 
 </LinearLayout>

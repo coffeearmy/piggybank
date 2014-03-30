@@ -160,10 +160,10 @@ public class AccountFragment extends Fragment {
 		case R.id.account_menu_add:
 			showNewOperationFragment();
 			break;
-		case R.id.account_menu_filter:
-			break;
-		case R.id.account_menu_properties:
-			break;
+//		case R.id.account_menu_filter:
+//			break;
+//		case R.id.account_menu_properties:
+//			break;
 		}
 		return (super.onOptionsItemSelected(item));
 	}
