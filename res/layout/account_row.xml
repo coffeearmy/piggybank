@@ -13,7 +13,7 @@
                 android:layout_centerVertical="true"
       			android:layout_margin="8dp" />
 
-    <TextView
+    <com.coffeearmy.piggybank.view.FontFitTextView
         android:id="@+id/txtv_operation_money"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

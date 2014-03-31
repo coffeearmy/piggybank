@@ -44,6 +44,8 @@ public class OperationDialog extends DialogFragment {
 	private TextView mDeleteOperation;
 	public int mSelectedIcon;
 	private RadioGroup mRadioGroup;
+	private boolean mSignForEdit;
+	private double mMoneyForEdit;
 
 	/** Returns an instance of the dialog */
 	public static OperationDialog newInstance(int mode, Operation item,
@@ -115,11 +117,11 @@ public class OperationDialog extends DialogFragment {
 
 	
 	private void setDialogReadyForEdit() {
-		boolean sign = getArguments().getBoolean(Constant.OPERATION_SING);
-		double editMoney = getArguments().getDouble(Constant.OPERATION_MONEY);
+		 mSignForEdit = getArguments().getBoolean(Constant.OPERATION_SING);
+		 mMoneyForEdit = getArguments().getDouble(Constant.OPERATION_MONEY);
 		
-		mToggleSign.setChecked(sign);
-		mEdtMoneyOperation.setText(Double.toString(editMoney));
+		mToggleSign.setChecked(mSignForEdit);
+		mEdtMoneyOperation.setText(Constant.DF.format(mMoneyForEdit));
 		
 		mViewSwitcher.showNext();
 		mDeleteOperation.setOnClickListener(new onDeleteOperationClickListener());
@@ -152,10 +154,8 @@ public class OperationDialog extends DialogFragment {
 		intent.putExtra(Constant.OPERATION_MONEY, newMoney);
 		intent.putExtra(Constant.OPERATION_SING, sign);
 		intent.putExtra(Constant.OPERATION_ICON, type);
-		intent.putExtra(Constant.OPERATION_SING_PREVIOUS, getArguments()
-				.getLong(Constant.OPERATION_SING));
-		intent.putExtra(Constant.OPERATION_MONEY_PREVIOUS, getArguments()
-				.getLong(Constant.OPERATION_MONEY));
+		intent.putExtra(Constant.OPERATION_SING_PREVIOUS, mSignForEdit);
+		intent.putExtra(Constant.OPERATION_MONEY_PREVIOUS, mMoneyForEdit);
 		intent.putExtra(Constant.ACCOUNT_ID,
 				getArguments().getLong(Constant.ACCOUNT_ID));
 		intent.putExtra(Constant.OPERATION_ID,

@@ -9,6 +9,7 @@ import com.coffeearmy.piggybank.Account;
 import com.coffeearmy.piggybank.Operation;
 import com.coffeearmy.piggybank.R;
 import com.coffeearmy.piggybank.adapters.AccountListAdapter.ViewHolder;
+import com.coffeearmy.piggybank.auxiliar.Constant;
 import com.coffeearmy.piggybank.view.CustomCheckIcon;
 import com.coffeearmy.piggybank.view.CustomIcon;
 
@@ -67,7 +68,7 @@ public class OperationListAdapter extends ArrayAdapter<Operation> {
 	    ViewHolder holder = (ViewHolder) rowView.getTag();
 	    Operation operation = items.get(position);
 	    
-	    String operationLabel=Double.toString(operation.getMoney());
+	    String operationLabel=Constant.DF.format(operation.getMoney());
 	    
 	    //Use red for negative amounts and green for positive amounts
 	    if(operation.getSign()){

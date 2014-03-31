@@ -19,6 +19,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
+import android.widget.FrameLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
@@ -29,7 +31,9 @@ import com.coffeearmy.piggybank.Operation;
 import com.coffeearmy.piggybank.PiggybankActivity;
 import com.coffeearmy.piggybank.R;
 import com.coffeearmy.piggybank.adapters.OperationListAdapter;
+import com.coffeearmy.piggybank.auxiliar.Constant;
 import com.coffeearmy.piggybank.data.OperationHandler;
+import com.coffeearmy.piggybank.view.FontFitTextView;
 
 import de.greenrobot.event.EventBus;
 
@@ -80,11 +84,23 @@ public class AccountFragment extends Fragment {
 		mTxtSwitchSaves.setFactory(new ViewFactory() {
 
 			public View makeView() {
-				TextView myText = new TextView(PiggybankActivity.getContext());
-				myText.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
-				myText.setTextSize(40);
-				myText.setTextColor(Color.WHITE);
-				return myText;
+				// com.coffeearmy.piggybank.view.FontFitTextView myText = new
+				// com.coffeearmy.piggybank.view.FontFitTextView(PiggybankActivity.getContext());
+				//
+				// myText.setLayoutParams( new
+				// FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+				// LayoutParams.WRAP_CONTENT));
+				// myText.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
+				// myText.setTextSize(40);
+				// myText.setTextColor(Color.WHITE);
+				LayoutInflater inflater = LayoutInflater.from(PiggybankActivity
+						.getContext());
+
+				TextView textView = (TextView) inflater.inflate(
+						R.layout.text_view_switcher, null);
+
+				return textView;
+
 			}
 		});
 		// /TODO TO BE DONE
@@ -100,7 +116,7 @@ public class AccountFragment extends Fragment {
 		// mTxtSwitchSaves.setOutAnimation(out);
 
 		// Set currect Saves
-		mTxtSwitchSaves.setText(currentMoney.toString());
+		mTxtSwitchSaves.setText(Constant.DF.format(currentMoney));
 
 		setHasOptionsMenu(true);
 		return (result);
@@ -160,10 +176,10 @@ public class AccountFragment extends Fragment {
 		case R.id.account_menu_add:
 			showNewOperationFragment();
 			break;
-//		case R.id.account_menu_filter:
-//			break;
-//		case R.id.account_menu_properties:
-//			break;
+		// case R.id.account_menu_filter:
+		// break;
+		// case R.id.account_menu_properties:
+		// break;
 		}
 		return (super.onOptionsItemSelected(item));
 	}

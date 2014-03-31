@@ -5,6 +5,7 @@ import java.util.List;
 import com.coffeearmy.piggybank.Account;
 import com.coffeearmy.piggybank.PiggybankActivity;
 import com.coffeearmy.piggybank.R;
+import com.coffeearmy.piggybank.auxiliar.Constant;
 import com.coffeearmy.piggybank.view.CustomCheckIcon;
 import com.coffeearmy.piggybank.view.CustomIcon;
 
@@ -62,7 +63,7 @@ public class AccountListAdapter extends ArrayAdapter<Account> {
 	    
 	    holder.text.setText(account.getName());
 	    
-	    String operationLabel = Double.toString(account.getMoney());
+	    String operationLabel = Constant.DF.format(account.getMoney());
 	    //Change the color if is <0 or >0
 	   
 		if (account.getMoney()>0) {

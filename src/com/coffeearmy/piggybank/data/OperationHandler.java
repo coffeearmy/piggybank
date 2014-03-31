@@ -280,11 +280,11 @@ public class OperationHandler extends Fragment {
 	/** Undo an operation to a account */
 	private Account undoOperation(Account account, Double money, boolean sign){
 		
-		if(sign){ //The op was adding
-			account.setMoney(account.getMoney()-Math.abs(money));			
+		if(!sign){ //The op is adding
+			account.setMoney(account.getMoney()+ Math.abs(money));			
 		}else{
-			account.setMoney(account.getMoney()+Math.abs(money));		
-		}		
+			account.setMoney(account.getMoney()-Math.abs(money));		
+		}			
 		return account;
 	}
 	

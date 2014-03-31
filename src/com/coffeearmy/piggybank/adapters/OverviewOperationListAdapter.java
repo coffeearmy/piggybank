@@ -9,6 +9,7 @@ import com.coffeearmy.piggybank.Account;
 import com.coffeearmy.piggybank.Operation;
 import com.coffeearmy.piggybank.PiggybankActivity;
 import com.coffeearmy.piggybank.R;
+import com.coffeearmy.piggybank.auxiliar.Constant;
 import com.coffeearmy.piggybank.view.CustomCheckIcon;
 import com.coffeearmy.piggybank.view.CustomIcon;
 
@@ -81,7 +82,7 @@ public class OverviewOperationListAdapter extends ArrayAdapter<Operation> {
 				// : "NNO");
 				holder.name.setText(account.getName());
 
-				String operationLabel = Double.toString(operation.getMoney());
+				String operationLabel = Constant.DF.format(operation.getMoney());
 				if (operation.getSign()) {
 					operationLabel = "+ " + operationLabel;
 					holder.money.setTextColor(context.getResources().getColor(

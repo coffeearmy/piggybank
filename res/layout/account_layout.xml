@@ -8,7 +8,9 @@
         android:id="@+id/txtSavesTotal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/bg_blue" >
+        android:background="@color/bg_blue"
+        android:measureAllChildren="false" >
+
     </TextSwitcher>
 
     <LinearLayout
@@ -24,8 +26,8 @@
         android:layout_height="wrap_content"
         android:divider="@drawable/abc_list_divider_holo_light"
         android:dividerHeight="1px"
-         android:paddingLeft="8dp"
-            android:paddingRight="8dp" >
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp" >
     </ListView>
 
 </LinearLayout>

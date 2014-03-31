@@ -1,5 +1,7 @@
 package com.coffeearmy.piggybank.auxiliar;
 
+import java.text.DecimalFormat;
+
 /** Constants used in EventBus and extras*/
 public class Constant {
 	public static String ACCOUNT_ID="account_id";
@@ -16,5 +18,8 @@ public class Constant {
 	//Only when edit an operation previous
 	public static String OPERATION_SING_PREVIOUS="operation_sign_previous";
 	public static String OPERATION_MONEY_PREVIOUS="operation_money_previous";
+	
+	//Number formatter
+	public static DecimalFormat DF = new DecimalFormat("#");	
 
 }

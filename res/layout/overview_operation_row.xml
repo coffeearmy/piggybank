@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.coffeearmy.piggybank"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res/com.coffeearmy.piggybank">
+    android:layout_height="wrap_content" >
     
       <com.coffeearmy.piggybank.view.CustomIcon
           android:id="@+id/imgvIconOperationOverview"
           android:layout_width="25dp"
           android:layout_height="25dp"
+          android:layout_centerVertical="true"
           android:layout_margin="8dp"
           android:paddingTop="8dp"
           app:numCustomStyleBG="1" />
@@ -23,27 +25,29 @@
          android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/second_grey" />
 
-    <TextView
+    <com.coffeearmy.piggybank.view.FontFitTextView
         android:id="@+id/txtvOperationsMoneyOverview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
         android:layout_margin="8dp"
-     
+        android:layout_toRightOf="@id/txtvDateOverview"
         android:gravity="right"
         android:text="Large Text"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-     <TextView
+     <com.coffeearmy.piggybank.view.FontFitTextView
          android:id="@+id/txtvAccountOperationOverview"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
          android:layout_below="@id/txtvDateOverview"
+         android:layout_toLeftOf="@id/txtvOperationsMoneyOverview"
          android:layout_toRightOf="@id/imgvIconOperationOverview"
          android:paddingLeft="8dp"
          android:paddingRight="8dp"
          android:text="account 1"
          android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@color/second_grey" />
+         android:textColor="@color/second_grey" />
 
 </RelativeLayout>
