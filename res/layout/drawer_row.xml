@@ -18,10 +18,11 @@
         android:id="@+id/txtvDrawerAccountName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
         android:layout_toRightOf="@id/imgvDrawerIconAccount"
-        android:gravity="center_vertical"
         android:text="000"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#000"
         tools:ignore="SelectableText" />
     
@@ -29,11 +30,9 @@
         android:id="@+id/txtvDrawerAccountMoney"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignWithParentIfMissing="true"
-        android:layout_centerVertical="true"
-        android:layout_margin="8dp"
-        android:gravity="center_vertical|right"
+        android:layout_below="@id/txtvDrawerAccountName"
+        android:layout_marginLeft="8dp"
+        android:layout_toRightOf="@id/imgvDrawerIconAccount"
         android:text="0000"
         android:textColor="#000"
         tools:ignore="SelectableText" />

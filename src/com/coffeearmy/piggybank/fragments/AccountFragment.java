@@ -84,15 +84,7 @@ public class AccountFragment extends Fragment {
 		mTxtSwitchSaves.setFactory(new ViewFactory() {
 
 			public View makeView() {
-				// com.coffeearmy.piggybank.view.FontFitTextView myText = new
-				// com.coffeearmy.piggybank.view.FontFitTextView(PiggybankActivity.getContext());
-				//
-				// myText.setLayoutParams( new
-				// FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT,
-				// LayoutParams.WRAP_CONTENT));
-				// myText.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
-				// myText.setTextSize(40);
-				// myText.setTextColor(Color.WHITE);
+			
 				LayoutInflater inflater = LayoutInflater.from(PiggybankActivity
 						.getContext());
 
@@ -150,11 +142,9 @@ public class AccountFragment extends Fragment {
 
 		// Get Current saves
 		Double currentMoney = mAccount.getMoney();
-		Log.d(OperationHandler.BD_OPERATION,
-				"listChanged" + mAccount.getMoney() + "  "
-						+ operationHandler.getAccountMoney(mAccountID));
+		
 		// Set currect Saves
-		mTxtSwitchSaves.setText(currentMoney.toString());
+		mTxtSwitchSaves.setText(Constant.DF.format(currentMoney));
 		// Get total saves
 		List<Operation> operationList = new ArrayList<Operation>();
 		operationList.addAll(operationHandler

@@ -5,11 +5,13 @@ import com.coffeearmy.piggybank.Operation;
 import com.coffeearmy.piggybank.R;
 import com.coffeearmy.piggybank.auxiliar.Constant;
 import com.coffeearmy.piggybank.data.OperationHandler;
+import com.coffeearmy.piggybank.fragments.AccountDialog.OnClickSelectedTag;
 import com.coffeearmy.piggybank.fragments.AccountDialog.OnDeleteAccountClickListener;
 import com.coffeearmy.piggybank.fragments.AccountDialog.OnEditAccountClickListener;
 import com.coffeearmy.piggybank.fragments.AccountDialog.OnIconIsSelected;
 import com.coffeearmy.piggybank.fragments.AccountDialog.OnSaveAccountClickListener;
 import com.coffeearmy.piggybank.view.CustomCheckIcon;
+import com.coffeearmy.piggybank.view.CustomIcon;
 
 import de.greenrobot.event.EventBus;
 import android.app.AlertDialog;
@@ -29,7 +31,8 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 import android.widget.ViewSwitcher;
 import android.widget.RadioGroup.OnCheckedChangeListener;
-/** Dialog for create/edit/delete an Operation*/
+
+/** Dialog for create/edit/delete an Operation */
 public class OperationDialog extends DialogFragment {
 
 	public static final String FRAGMENT_TAG = "dialog_operation_tag";
@@ -46,20 +49,22 @@ public class OperationDialog extends DialogFragment {
 	private RadioGroup mRadioGroup;
 	private boolean mSignForEdit;
 	private double mMoneyForEdit;
+	private CustomIcon mCustomIcon;
 
 	/** Returns an instance of the dialog */
 	public static OperationDialog newInstance(int mode, Operation item,
 			Account account) {
 		OperationDialog f = new OperationDialog();
-		mIsInEditMode=false;
-		
+		mIsInEditMode = false;
+
 		Bundle args = new Bundle();
 		if (mode == 1) {// Edit Operation
 			args.putLong(Constant.OPERATION_ID, item.getId());
 			args.putDouble(Constant.OPERATION_MONEY, item.getMoney());
 			args.putBoolean(Constant.OPERATION_SING, item.getSign());
 			args.putLong(Constant.ACCOUNT_ID, account.getId());
-			mIsInEditMode=true;
+			args.putInt(Constant.OPERATION_ICON, item.getIcon());
+			mIsInEditMode = true;
 		} else {
 			args.putLong(Constant.ACCOUNT_ID, account.getId());
 		}
@@ -70,40 +75,44 @@ public class OperationDialog extends DialogFragment {
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		
-		mSelectedIcon=0;
+
+		mSelectedIcon = 0;
 
 		LayoutInflater inflater = getActivity().getLayoutInflater();
 		View view = inflater.inflate(R.layout.new_operation_dialog, null);
-		
+
 		mEdtMoneyOperation = (EditText) view
 				.findViewById(R.id.edtQuantityOperation);
 		mToggleSign = (ToggleButton) view.findViewById(R.id.tbtnAddSaves);
-		
-		mDeleteOperation=(TextView) view.findViewById(R.id.txtvDeleteOperation);
-		mRadioGroup=(RadioGroup) view.findViewById(R.id. radioGroupOperationIcon);
+
+		mDeleteOperation = (TextView) view
+				.findViewById(R.id.txtvDeleteOperation);
+		mRadioGroup = (RadioGroup) view
+				.findViewById(R.id.radioGroupOperationIcon);
 		mRadioGroup.clearCheck();
 		mRadioGroup.setOnCheckedChangeListener(new OnIconIsSelected());
-		
+
 		mViewSwitcher = (ViewSwitcher) view
-		 .findViewById(R.id.viewSwitcherOperationDialog);
+				.findViewById(R.id.viewSwitcherOperationDialog);
 		mToggleSign.setSelected(true);
 		mEdtMoneyOperation.setHint("0.0");
+
+		mCustomIcon = (CustomIcon) view
+				.findViewById(R.id.imgSelectOperationTag);
+		mCustomIcon.setOnClickListener(new OnClickSelectedTag());
 
 		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(
 				getActivity());
 		if (getArguments().size() == 1) {
 			alertBuilder
-					
-					.setPositiveButton("Add",
-							new OnSaveOperationClickListener())
+
+			.setPositiveButton("Add", new OnSaveOperationClickListener())
 					.setNegativeButton("No way", null);
 
 		} else {
 			alertBuilder
-					
-					.setPositiveButton("Update",
-							new OnEditOperationClickListener())
+
+			.setPositiveButton("Update", new OnEditOperationClickListener())
 					.setNegativeButton("No way", null);
 			setDialogReadyForEdit();
 		}
@@ -115,16 +124,18 @@ public class OperationDialog extends DialogFragment {
 		return customDialog;
 	}
 
-	
 	private void setDialogReadyForEdit() {
-		 mSignForEdit = getArguments().getBoolean(Constant.OPERATION_SING);
-		 mMoneyForEdit = getArguments().getDouble(Constant.OPERATION_MONEY);
-		
+		mSignForEdit = getArguments().getBoolean(Constant.OPERATION_SING);
+		mMoneyForEdit = getArguments().getDouble(Constant.OPERATION_MONEY);
+		mSelectedIcon =  getArguments().getInt(Constant.OPERATION_ICON);
+		mCustomIcon.setStyle(1, mSelectedIcon);
+
 		mToggleSign.setChecked(mSignForEdit);
 		mEdtMoneyOperation.setText(Constant.DF.format(mMoneyForEdit));
-		
+
 		mViewSwitcher.showNext();
-		mDeleteOperation.setOnClickListener(new onDeleteOperationClickListener());
+		mDeleteOperation
+				.setOnClickListener(new onDeleteOperationClickListener());
 	}
 
 	protected void readFieldsEditOperation() {
@@ -142,7 +153,8 @@ public class OperationDialog extends DialogFragment {
 		}
 
 		cuantityFromStringInputEdit = Double.parseDouble(amountfromEditText);
-		sendMessageForEditOperation(cuantityFromStringInputEdit, isAddingOp, mSelectedIcon);
+		sendMessageForEditOperation(cuantityFromStringInputEdit, isAddingOp,
+				mSelectedIcon);
 
 	}
 
@@ -177,10 +189,12 @@ public class OperationDialog extends DialogFragment {
 
 		if (!isEmpty(mEdtMoneyOperation)) {
 			amountfromEditText = mEdtMoneyOperation.getText().toString();
+			cuantityFromStringInputEdit = Double
+					.parseDouble(amountfromEditText);
 		}
 
-		cuantityFromStringInputEdit = Double.parseDouble(amountfromEditText);
-		sendMessageNewOperation(cuantityFromStringInputEdit, isAddingOp, mSelectedIcon);
+		sendMessageNewOperation(cuantityFromStringInputEdit, isAddingOp,
+				mSelectedIcon);
 
 	}
 
@@ -267,14 +281,30 @@ public class OperationDialog extends DialogFragment {
 			dismiss();
 		}
 	}
-	/** On click listener for choosing a icon for the operatio*/
-	protected class OnIconIsSelected implements OnCheckedChangeListener{
+
+	/** On click listener for choosing a icon for the operatio */
+	protected class OnIconIsSelected implements OnCheckedChangeListener {
 
 		@Override
 		public void onCheckedChanged(RadioGroup group, int checkedId) {
-			mSelectedIcon=((CustomCheckIcon)group.findViewById(checkedId)).getIconSelected();
+			mSelectedIcon = ((CustomCheckIcon) group.findViewById(checkedId))
+					.getIconSelected();
+			if (mIsInEditMode) {
+				mViewSwitcher.showPrevious();
+				mCustomIcon.setStyle(1, mSelectedIcon);
+			}
+
 		}
-		
+
+	}
+
+	/** OnClick listener calls to delete Account method */
+	protected class OnClickSelectedTag implements OnClickListener {
+
+		@Override
+		public void onClick(View v) {
+			mViewSwitcher.showNext();
+		}
 	}
 
 }

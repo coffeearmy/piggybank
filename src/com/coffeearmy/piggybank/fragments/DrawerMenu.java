@@ -199,10 +199,11 @@ public class DrawerMenu extends Fragment implements OnItemClickListener,
 		Fragment prev = mFragmentManager
 				.findFragmentByTag(OverviewFragment.FRAGMENT_TAG);
 		if (prev != null) {
-			ft.remove(prev);
+			ft.attach(prev);
+		}else{			
+			ft.add(R.id.content_frame, fragment, OverviewFragment.FRAGMENT_TAG).commit();
+			//ft.addToBackStack(null).commit();
 		}
-		ft.addToBackStack(null);
-		ft.replace(R.id.content_frame, fragment, OverviewFragment.FRAGMENT_TAG).commit();
 		
 		PiggybankActivity.closeDrawer("Overview");
 	}
