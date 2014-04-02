@@ -79,7 +79,7 @@ public class OverviewFragment extends Fragment {
 				new OverviewOperationListAdapter(
 						PiggybankActivity.getContext(),
 						R.layout.overview_operation_row, 1, mListOperations));
-		((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+	
 		return result;
 	}
 

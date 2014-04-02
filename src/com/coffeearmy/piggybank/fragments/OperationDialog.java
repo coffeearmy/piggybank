@@ -50,6 +50,7 @@ public class OperationDialog extends DialogFragment {
 	private boolean mSignForEdit;
 	private double mMoneyForEdit;
 	private CustomIcon mCustomIcon;
+	private int mSelectedBG;
 
 	/** Returns an instance of the dialog */
 	public static OperationDialog newInstance(int mode, Operation item,
@@ -63,6 +64,7 @@ public class OperationDialog extends DialogFragment {
 			args.putDouble(Constant.OPERATION_MONEY, item.getMoney());
 			args.putBoolean(Constant.OPERATION_SING, item.getSign());
 			args.putLong(Constant.ACCOUNT_ID, account.getId());
+			args.putInt(Constant.ACCOUNT_ICON, account.getIcon());
 			args.putInt(Constant.OPERATION_ICON, item.getIcon());
 			mIsInEditMode = true;
 		} else {
@@ -100,6 +102,7 @@ public class OperationDialog extends DialogFragment {
 		mCustomIcon = (CustomIcon) view
 				.findViewById(R.id.imgSelectOperationTag);
 		mCustomIcon.setOnClickListener(new OnClickSelectedTag());
+		
 
 		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(
 				getActivity());
@@ -128,7 +131,8 @@ public class OperationDialog extends DialogFragment {
 		mSignForEdit = getArguments().getBoolean(Constant.OPERATION_SING);
 		mMoneyForEdit = getArguments().getDouble(Constant.OPERATION_MONEY);
 		mSelectedIcon =  getArguments().getInt(Constant.OPERATION_ICON);
-		mCustomIcon.setStyle(1, mSelectedIcon);
+		mSelectedBG=getArguments().getInt(Constant.ACCOUNT_ICON);
+		mCustomIcon.setStyle(mSelectedBG, mSelectedIcon);
 
 		mToggleSign.setChecked(mSignForEdit);
 		mEdtMoneyOperation.setText(Constant.DF.format(mMoneyForEdit));
@@ -291,7 +295,7 @@ public class OperationDialog extends DialogFragment {
 					.getIconSelected();
 			if (mIsInEditMode) {
 				mViewSwitcher.showPrevious();
-				mCustomIcon.setStyle(1, mSelectedIcon);
+				mCustomIcon.setStyle(mSelectedBG, mSelectedIcon);
 			}
 
 		}

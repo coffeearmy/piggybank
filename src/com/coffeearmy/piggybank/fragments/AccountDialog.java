@@ -1,6 +1,7 @@
 package com.coffeearmy.piggybank.fragments;
 
 import com.coffeearmy.piggybank.Account;
+import com.coffeearmy.piggybank.PiggybankActivity;
 import com.coffeearmy.piggybank.R;
 import com.coffeearmy.piggybank.auxiliar.Constant;
 import com.coffeearmy.piggybank.data.OperationHandler;
@@ -15,9 +16,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.GridLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -52,6 +57,8 @@ public class AccountDialog extends DialogFragment {
 
 	public int mSelectedStyle = 0;
 
+	private FragmentManager mFragmentManager;
+
 	/** Returns an instance of the dialog */
 	public static AccountDialog newInstance(int mode, Account account) {
 		AccountDialog f = new AccountDialog();
@@ -71,6 +78,10 @@ public class AccountDialog extends DialogFragment {
 
 		LayoutInflater inflater = getActivity().getLayoutInflater();
 		View view = inflater.inflate(R.layout.new_account_dialog, null);
+		
+		// Fragment Manager
+		mFragmentManager = getActivity().getSupportFragmentManager();
+		
 
 		mEdtAccountName = (EditText) view.findViewById(R.id.edtNameAccount);
 		mEdtInitialQuantity = (EditText) view
@@ -87,6 +98,7 @@ public class AccountDialog extends DialogFragment {
 		mRadioGroup.setOnCheckedChangeListener(new OnIconIsSelected());
 
 		mCustomIcon = (CustomIcon) view.findViewById(R.id.imgSelectTag);
+		
 		mCustomIcon.setOnClickListener(new OnClickSelectedTag());
 
 		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(
@@ -184,6 +196,23 @@ public class AccountDialog extends DialogFragment {
 	private boolean isEmpty(EditText etText) {
 		return etText.getText().toString().trim().length() == 0;
 	}
+	
+	/** Show the Overview fragment, if an account is deleted"*/
+	protected void showOverviewFragment() {
+		Fragment fragment = OverviewFragment.newInstance();
+		
+		FragmentTransaction ft = mFragmentManager.beginTransaction();
+		Fragment prev = mFragmentManager
+				.findFragmentByTag(OverviewFragment.FRAGMENT_TAG);
+		if (prev != null) {
+			ft.attach(prev);
+		}else{			
+			ft.add(R.id.content_frame, fragment, OverviewFragment.FRAGMENT_TAG).commit();
+			//ft.addToBackStack(null).commit();
+		}
+		
+		PiggybankActivity.closeDrawer("Overview");
+	}
 
 	// Listeners
 	/** OnClick listener calls to new Account method */
@@ -213,9 +242,11 @@ public class AccountDialog extends DialogFragment {
 		public void onClick(View v) {
 			deleteAccountSendMenssage(getArguments().getLong(
 					Constant.ACCOUNT_ID));
+			showOverviewFragment();
 			dismiss();
 		}
 	}
+	
 
 	/** OnClick listener calls to delete Account method */
 	protected class OnClickSelectedTag implements OnClickListener {

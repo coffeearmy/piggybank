@@ -9,6 +9,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat.Style;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.util.Log;
 import android.view.Gravity;
@@ -19,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.ListView;
@@ -32,6 +34,7 @@ import com.coffeearmy.piggybank.PiggybankActivity;
 import com.coffeearmy.piggybank.R;
 import com.coffeearmy.piggybank.adapters.OperationListAdapter;
 import com.coffeearmy.piggybank.auxiliar.Constant;
+import com.coffeearmy.piggybank.auxiliar.StyleAPP;
 import com.coffeearmy.piggybank.data.OperationHandler;
 import com.coffeearmy.piggybank.view.FontFitTextView;
 
@@ -76,7 +79,7 @@ public class AccountFragment extends Fragment {
 						.getContext(), android.R.layout.simple_list_item_1, 1,
 						results));
 		// Set onLongclick listener
-		mOperationList.setOnItemLongClickListener(new OnOperationLongClick());
+		mOperationList.setOnItemClickListener(new OnOperationClick());
 		// Set total saves
 		mTxtSwitchSaves = (TextSwitcher) result
 				.findViewById(R.id.txtSavesTotal);
@@ -95,6 +98,11 @@ public class AccountFragment extends Fragment {
 
 			}
 		});
+		
+		//Set TextSwitch background 
+		int[] backgroundColor= StyleAPP.getBackgroundColor(getActivity(), mAccount.getIcon());
+			mTxtSwitchSaves.setBackgroundColor(backgroundColor[0]);
+		
 		// /TODO TO BE DONE
 		// Declare the in and out animations and initialize them
 		// NINEOLDANIMATION
@@ -158,6 +166,8 @@ public class AccountFragment extends Fragment {
 		inflater.inflate(R.menu.account_menu, menu);
 		super.onCreateOptionsMenu(menu, inflater);
 	}
+	
+	
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -192,7 +202,8 @@ public class AccountFragment extends Fragment {
 
 	}
 
-	/** On Long click in a row of the list shows the operation dialog for edit */
+	/** TOBEDONE In future, when onclick shows a another info. 
+	 * On Long click in a row of the list shows the operation dialog for edit */
 	protected class OnOperationLongClick implements OnItemLongClickListener {
 
 		@Override
@@ -205,7 +216,19 @@ public class AccountFragment extends Fragment {
 		}
 
 	}
+	/** On  click in a row of the list shows the operation dialog for edit */
+	protected class OnOperationClick implements OnItemClickListener{
 
+		@Override
+		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+				long arg3) {
+			showEditOperationFragment((Operation) arg0.getAdapter().getItem(
+					arg2));
+			mOperationList.setSelection(arg2);
+		}
+		
+	}
+	
 	/** Pass information with the row clicked for the operation dialog */
 	private void showEditOperationFragment(Operation item) {
 		FragmentTransaction ft = mFragmentManager.beginTransaction();

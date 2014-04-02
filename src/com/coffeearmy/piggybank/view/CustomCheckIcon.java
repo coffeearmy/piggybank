@@ -9,15 +9,17 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.StateListDrawable;
+import android.graphics.drawable.shapes.OvalShape;
+import android.graphics.drawable.shapes.Shape;
 import android.util.AttributeSet;
 import android.widget.RadioButton;
 
 import com.coffeearmy.piggybank.R;
 
-/** Custom Radio Button for choosing the Icon for the account/operation
- * The View uses a StateListDrawable for the Checked events, and layer lists
- * for the drawables.
- * TOBE DONE more comments when the classes are finished  
+/**
+ * Custom Radio Button for choosing the Icon for the account/operation The View
+ * uses a StateListDrawable for the Checked events, and layer lists for the
+ * drawables. TOBE DONE more comments when the classes are finished
  */
 public class CustomCheckIcon extends RadioButton {
 
@@ -31,18 +33,18 @@ public class CustomCheckIcon extends RadioButton {
 
 	public CustomCheckIcon(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		
-		mResources=context.getResources();
+
+		mResources = context.getResources();
 		TypedArray customAttributes = context.obtainStyledAttributes(attrs,
 				R.styleable.CustomCheckIcon);
-		//Retrieve custom parameters for the bg colors and the icon
+		// Retrieve custom parameters for the bg colors and the icon
 		mStyleID = customAttributes.getInt(
 				R.styleable.CustomCheckIcon_numCustomStyle, 0);
 		mIconID = customAttributes.getInt(
 				R.styleable.CustomIcon_numCustomIconBG, -1);
 		int[] colorsFromAttributes = getBackgroundColor(context, mStyleID);
-		
-		//Colors for the Background Gradient
+
+		// Colors for the Background Gradient
 		mBeginColor = colorsFromAttributes[0];
 		mEndColor = colorsFromAttributes[1];
 		customAttributes.recycle();
@@ -57,8 +59,8 @@ public class CustomCheckIcon extends RadioButton {
 		mIconBased = getIconBase();
 		Drawable stateChecked = getCheckedIcon();
 		Drawable stateUncheked = mIconBased;
-		if(mIconID>-1){
-			 stateUncheked = setIcon(mIconBased);	
+		if (mIconID > -1) {
+			stateUncheked = setIcon(mIconBased);
 		}
 		StateListDrawable stateList = new StateListDrawable();
 		stateList.addState(new int[] { android.R.attr.state_checked },
@@ -71,19 +73,32 @@ public class CustomCheckIcon extends RadioButton {
 
 	private Drawable setIcon(Drawable mIconBased2) {
 		Drawable[] layerDrawable = new Drawable[] { mIconBased,
-				 getIcon(mIconID) };
+				getIcon(mIconID) };
 		LayerDrawable iconLayer = new LayerDrawable(layerDrawable);
 
 		return iconLayer;
 	}
 
 	private Drawable getIconBase() {
-		// ShapeDrawable circle = new ShapeDrawable(new
-		// OvalShape());//ORIENTATION, new int[]{mBeginColor,mEndColor}
+		
+		if(mIconID==-1){
 		GradientDrawable gradient = new GradientDrawable(ORIENTATION,
 				new int[] { mBeginColor, mEndColor });
 		gradient.setShape(GradientDrawable.OVAL);
-		// gradient.setSize(30, 30);
+		return gradient;
+		}else{
+			return getIconBGEmpty();
+		}
+
+		
+	}
+
+	private Drawable getIconBGEmpty() {
+		
+		GradientDrawable gradient = new GradientDrawable(ORIENTATION,
+				new int[] { Color.WHITE, Color.WHITE });
+		gradient.setShape(GradientDrawable.OVAL);
+		gradient.setStroke(3, Color.DKGRAY);
 		return gradient;
 	}
 
@@ -103,7 +118,6 @@ public class CustomCheckIcon extends RadioButton {
 		requestLayout();
 	}
 
-
 	/** Retrieve the colors associated with style @param i */
 	public int[] getBackgroundColor(Context c, int i) {
 
@@ -122,6 +136,7 @@ public class CustomCheckIcon extends RadioButton {
 
 		return colors;
 	}
+
 	/** Retrieve the icon associated with style @param i */
 	public Drawable getIcon(int i) {
 
@@ -137,6 +152,7 @@ public class CustomCheckIcon extends RadioButton {
 	public int getIconSelected() {
 		return mIconID;
 	}
+
 	public int getStyle() {
 		return mStyleID;
 	}

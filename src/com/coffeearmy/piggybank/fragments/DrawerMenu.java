@@ -10,6 +10,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -111,6 +113,15 @@ public class DrawerMenu extends Fragment implements OnItemClickListener,
 	public void onPause() {
 		EventBus.getDefault().unregister(this);
 		super.onPause();
+	}
+	
+	@Override
+	public void onPrepareOptionsMenu(Menu menu) {
+		MenuItem menuItemAccountView = menu.findItem(R.id.account_menu_add);
+		if(menuItemAccountView!=null){
+			menuItemAccountView.setVisible(false);
+		}
+		super.onPrepareOptionsMenu(menu);
 	}
 
 	/** EventBus class for listening the broadcast events */

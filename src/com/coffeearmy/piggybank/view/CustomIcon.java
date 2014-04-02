@@ -8,6 +8,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
@@ -25,7 +26,6 @@ public class CustomIcon extends View {
 	private int mBeginColor;
 	private int mEndColor;
 	private Drawable mIconBased;
-	private Context mContext;
 	private int mStyleID = 0;
 	private Resources mResources;
 	private int mIconID;
@@ -35,24 +35,29 @@ public class CustomIcon extends View {
 
 		mContext = context;
 		mResources = context.getResources();
+		//Read custom attributes 
 		TypedArray customAttributes = context.obtainStyledAttributes(attrs,
 				R.styleable.CustomIcon);
+		//Specify the background of the icon, is the same style of the account
 		mStyleID = customAttributes.getInt(
 				R.styleable.CustomIcon_numCustomStyleBG, 0);
+		//Graphic of the icon
 		mIconID = customAttributes.getInt(
 				R.styleable.CustomIcon_numCustomIconBG, -1);
-
+		//Get two background colors for the gradient
 		int[] colorsFromAttributes = getBackgroundColor(mStyleID);
 
 		mBeginColor = colorsFromAttributes[0];
 		mEndColor = colorsFromAttributes[1];
 
 		customAttributes.recycle();
-
+		//Get background of the icon
 		mIconBased = getIconBase();
-		if (mIconID == -1)// Is an Account ICon and only need the background
+		
+		if (mIconID == -1)// Is an Account, and only need the background
 			setBackgroundDrawable(mIconBased);
 		else {
+			//Is an operation, need the bg and a graphic.
 			Drawable bgCustomRadioItem = getCustomIcon(mIconID);
 			setBackgroundDrawable(bgCustomRadioItem);
 		}
@@ -71,7 +76,7 @@ public class CustomIcon extends View {
 		// mIconBased
 		Drawable[] layerDrawable = new Drawable[] { mIconBased, getIcon(iconID) };
 		LayerDrawable iconLayer = new LayerDrawable(layerDrawable);
-
+		
 		return iconLayer;
 	}
 
@@ -129,7 +134,6 @@ public class CustomIcon extends View {
 		TypedArray arrayBackgroundIcon = mResources
 				.obtainTypedArray(R.array.icon_op_values_array);
 		Drawable customIcon = arrayBackgroundIcon.getDrawable(i);
-
 		arrayBackgroundIcon.recycle();
 
 		return customIcon;
