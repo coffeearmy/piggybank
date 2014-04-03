@@ -30,11 +30,12 @@ public class OverviewFragment extends Fragment {
 	public static final String FRAGMENT_TAG = "overview_fragment_tag";
 	private static OverviewFragment mOverview;
 
+	///The static instance done for future functionality in the overview
 	public static OverviewFragment newInstance() {
 
-		if (mOverview == null) {
+	
 			mOverview = new OverviewFragment();
-		}
+		
 		return mOverview;
 	}
 

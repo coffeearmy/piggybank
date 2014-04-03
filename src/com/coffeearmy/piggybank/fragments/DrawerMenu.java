@@ -186,10 +186,7 @@ public class DrawerMenu extends Fragment implements OnItemClickListener,
 
 		// Create a new fragment and specify the planet to show based on
 		// position
-		Fragment fragment = new AccountFragment();
-		Bundle args = new Bundle();
-		args.putLong(AccountFragment.ACCOUNT_ID, ID);
-		fragment.setArguments(args);
+		Fragment fragment = AccountFragment.newInstance(ID);
 
 		// Insert the fragment by replacing any existing fragment
 		mFragmentManager
@@ -206,16 +203,10 @@ public class DrawerMenu extends Fragment implements OnItemClickListener,
 	protected void showOverviewFragment() {
 		Fragment fragment = OverviewFragment.newInstance();
 		
-		FragmentTransaction ft = mFragmentManager.beginTransaction();
-		Fragment prev = mFragmentManager
-				.findFragmentByTag(OverviewFragment.FRAGMENT_TAG);
-		if (prev != null) {
-			ft.attach(prev);
-		}else{			
-			ft.add(R.id.content_frame, fragment, OverviewFragment.FRAGMENT_TAG).commit();
-			//ft.addToBackStack(null).commit();
-		}
-		
+		mFragmentManager
+		.beginTransaction()
+		.replace(R.id.content_frame, fragment,
+				OverviewFragment.FRAGMENT_TAG).commit();
 		PiggybankActivity.closeDrawer("Overview");
 	}
 

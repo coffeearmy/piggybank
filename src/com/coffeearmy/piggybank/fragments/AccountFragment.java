@@ -53,6 +53,18 @@ public class AccountFragment extends Fragment {
 	private Account mAccount;
 	private long mAccountID;
 	private FragmentManager mFragmentManager;
+	//Static pattern for Fragments
+	public static AccountFragment newInstance(long ID) {
+		
+		AccountFragment f = new AccountFragment();
+	    
+		Bundle args = new Bundle();
+	    args.putLong(AccountFragment.ACCOUNT_ID, ID);
+	    f.setArguments(args);
+	    
+	    return f;
+	  }
+	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,

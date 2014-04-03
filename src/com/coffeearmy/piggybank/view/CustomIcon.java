@@ -29,6 +29,7 @@ public class CustomIcon extends View {
 	private int mStyleID = 0;
 	private Resources mResources;
 	private int mIconID;
+	private Context mContext;
 
 	public CustomIcon(Context context, AttributeSet attrs) {
 		super(context, attrs);
