@@ -1,5 +1,6 @@
 package com.coffeearmy.piggybank.data;
 
+import java.util.Date;
 import java.util.List;
 
 import android.database.sqlite.SQLiteDatabase;
@@ -109,6 +110,14 @@ public class OperationSQLProvider implements OperationsManagerInterface {
 				.list();
 		
 	}
+	
+	public List<Operation> getLastOperationListbyDate(Date endDate){
+		 return operationDao.queryBuilder()
+				 	.where(OperationDao.Properties.Date.ge(endDate))
+					.orderDesc(OperationDao.Properties.Date)
+					.list();
+			
+		}
 
 	@Override
 	public void deleteOperation(long operationID) {

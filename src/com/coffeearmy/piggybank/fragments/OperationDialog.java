@@ -154,9 +154,10 @@ public class OperationDialog extends DialogFragment {
 
 		if (!isEmpty(mEdtMoneyOperation)) {
 			amountfromEditText = mEdtMoneyOperation.getText().toString();
+			cuantityFromStringInputEdit = Double.parseDouble(amountfromEditText);
 		}
 
-		cuantityFromStringInputEdit = Double.parseDouble(amountfromEditText);
+		
 		sendMessageForEditOperation(cuantityFromStringInputEdit, isAddingOp,
 				mSelectedIcon);
 

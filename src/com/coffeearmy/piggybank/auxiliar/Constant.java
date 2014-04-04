@@ -1,6 +1,11 @@
 package com.coffeearmy.piggybank.auxiliar;
 
 import java.text.DecimalFormat;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
+
 
 /** Constants used in EventBus and extras*/
 public class Constant {
@@ -21,5 +26,8 @@ public class Constant {
 	
 	//Number formatter
 	public static DecimalFormat DF = new DecimalFormat("#");	
+	
+	//Date formatter
+	public static DateFormat dateFormatMMMDD= SimpleDateFormat.getDateInstance(DateFormat.LONG, Locale.getDefault());
 
 }

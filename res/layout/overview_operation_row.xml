@@ -2,7 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res/com.coffeearmy.piggybank"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content"
+    android:minHeight="48dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp" >
     
       <com.coffeearmy.piggybank.view.CustomIcon
           android:id="@+id/imgvIconOperationOverview"

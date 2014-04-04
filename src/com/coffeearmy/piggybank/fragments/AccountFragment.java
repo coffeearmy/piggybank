@@ -136,6 +136,7 @@ public class AccountFragment extends Fragment {
 
 	@Override
 	public void onPause() {
+		Log.d(ACCOUNT_FRAGMENT_TAG, "unregister AccountFragment");
 		EventBus.getDefault().unregister(this);
 		super.onPause();
 	}
@@ -144,6 +145,7 @@ public class AccountFragment extends Fragment {
 	public void onResume() {
 		// Set Title in the action bar
 		getActivity().setTitle(operationHandler.getAccountName(mAccount));
+		Log.d(ACCOUNT_FRAGMENT_TAG, "register AccountFragment");
 		EventBus.getDefault().register(this);
 		super.onResume();
 	}

@@ -1,5 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-   xmlns:tools="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/row_container_operation"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -12,14 +12,14 @@
         android:layout_height="25dp"
         android:layout_centerVertical="true"
         android:layout_margin="8dp"
-        />
+        android:paddingLeft="8dp" />
 
     <com.coffeearmy.piggybank.view.FontFitTextView
         android:id="@+id/txtvDrawerAccountName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:layout_toRightOf="@id/imgvDrawerIconAccount"
         android:text="000"
         android:textAppearance="?android:attr/textAppearanceMedium"

@@ -3,8 +3,10 @@ package com.coffeearmy.piggybank.data;
 import java.util.Date;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 
@@ -41,10 +43,15 @@ public class OperationHandler extends Fragment {
 		if (mOperationHandler == null) {
 			mOperationHandler = new OperationHandler();
 			
-			return mOperationHandler;
-		} else {
-			return mOperationHandler;
 		}
+			return mOperationHandler;
+		
+	}
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		 setRetainInstance(true);
+		super.onCreate(savedInstanceState);
 	}
 	
 	/**
@@ -91,16 +98,20 @@ public class OperationHandler extends Fragment {
 		//We send a broadcast event for refresh lists.
 		EventBus.getDefault().post(DrawerMenu.NOTIFY_CHANGE_ACCOUNT_LIST);
 	}
+
 	
 	@Override
 	public void onResume() {
+
 		EventBus.getDefault().register(this);
+	
 		super.onResume();
 	}
 
 	
 	@Override
 	public void onPause() {
+		
 		EventBus.getDefault().unregister(this);
 		super.onPause();
 	}	
@@ -307,6 +318,11 @@ public class OperationHandler extends Fragment {
 
 	public List<Operation> getOperationsFromAccountList(Account account){
 		return dataProvider.getOperationsList(account);
+	}
+	
+	public List<Operation> getLastOperationListbyDate(Date endDate){
+		return dataProvider.getLastOperationListbyDate(endDate);
+		
 	}
 	
 }

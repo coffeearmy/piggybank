@@ -1,5 +1,7 @@
 package com.coffeearmy.piggybank.fragments;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -22,6 +25,7 @@ import com.coffeearmy.piggybank.Operation;
 import com.coffeearmy.piggybank.PiggybankActivity;
 import com.coffeearmy.piggybank.R;
 import com.coffeearmy.piggybank.adapters.OverviewOperationListAdapter;
+import com.coffeearmy.piggybank.auxiliar.Constant;
 import com.coffeearmy.piggybank.data.OperationHandler;
 
 /** This fragmnet is under construction :) please check it later */
@@ -71,10 +75,24 @@ public class OverviewFragment extends Fragment {
 		listOverview.setEmptyView(emptyView);
 		
 		//Set Header listview
-		TextView titleView = new TextView(getActivity());
-		titleView.setText("Last Operation");
-		listOverview.addHeaderView(titleView);
+//		TextView titleView = new TextView(getActivity());
+//		titleView.setText("Last Operation");
+//		listOverview.addHeaderView(titleView);
+		//Calendar
+		//Get operation in last week
+		Calendar calendar = Calendar.getInstance();
+		Date dateToday=calendar.getTime();
+		calendar.add(Calendar.DATE, -7);
+		Date dateLastWeek = calendar.getTime();		
 		
+		mListOperations = mOperationHandler.getLastOperationListbyDate(dateLastWeek);
+		
+		View headerOverviewView = inflater.inflate(R.layout.header_overview, null);
+		TextView datesRange=(TextView) headerOverviewView.findViewById(R.id.txtvOverviewDateHeader);
+		datesRange.setText("Today - "+Constant.dateFormatMMMDD.format(dateLastWeek));
+		
+		//Add Overview 
+		listOverview.addHeaderView(headerOverviewView);
 		
 		listOverview.setAdapter(
 				new OverviewOperationListAdapter(
@@ -119,6 +137,8 @@ public class OverviewFragment extends Fragment {
 //		super.onCreateOptionsMenu(menu, inflater);
 //	}
 	
+	
+
 	/** Show the Overview fragment, and change the actionbar title to "Overview"*/
 	protected void showOverviewFragment() {
 		Fragment fragment = OverviewFragment.newInstance();

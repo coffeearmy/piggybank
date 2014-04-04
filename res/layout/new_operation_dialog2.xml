@@ -82,6 +82,57 @@
             android:checked="false"
             app:numCustomIcon="7"
             app:numCustomStyle="7" />
+         <com.coffeearmy.piggybank.view.CustomCheckIcon
+            android:id="@+id/radioOp8"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="4dp"
+            android:checked="false"
+            app:numCustomIcon="8"
+            app:numCustomStyle="6" />
+
+        <com.coffeearmy.piggybank.view.CustomCheckIcon
+            android:id="@+id/radioOp9"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="4dp"
+            android:checked="false"
+            app:numCustomIcon="9"
+            app:numCustomStyle="7" />
+         <com.coffeearmy.piggybank.view.CustomCheckIcon
+            android:id="@+id/radioOp10"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="4dp"
+            android:checked="false"
+            app:numCustomIcon="10"
+            app:numCustomStyle="6" />
+
+        <com.coffeearmy.piggybank.view.CustomCheckIcon
+            android:id="@+id/radioOp11"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="4dp"
+            android:checked="false"
+            app:numCustomIcon="11"
+            app:numCustomStyle="7" />
+         <com.coffeearmy.piggybank.view.CustomCheckIcon
+            android:id="@+id/radioOp12"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="4dp"
+            android:checked="false"
+            app:numCustomIcon="12"
+            app:numCustomStyle="6" />
+
+        <com.coffeearmy.piggybank.view.CustomCheckIcon
+            android:id="@+id/radioOp13"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="4dp"
+            android:checked="false"
+            app:numCustomIcon="13"
+            app:numCustomStyle="7" />
 
     </RadioGroup>
 

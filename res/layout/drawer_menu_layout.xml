@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/Holo_bg_grey"
+    android:clickable="true"
     android:orientation="vertical" >
 
     <ImageView
@@ -16,16 +17,13 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="2dp"
-        android:background="@color/card_shadow" >
+        android:layout_height="wrap_content" >
 
         <ImageView
             android:id="@+id/imgListOverview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_margin="8dp"
             android:src="@drawable/ic_action_view_as_list" />
 
         <TextView
@@ -37,13 +35,13 @@
             android:padding="8dp"
             android:text="Overview"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/card_white" />
+            android:textColor="@android:color/black" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/RelativeLayout1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:background="@color/card_shadow" >
 
         <ImageView
@@ -52,17 +50,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_margin="8dp"
             android:background="@color/card_shadow"
+            android:padding="8dp"
             android:src="@drawable/ic_action_new" />
-
-        <ImageView
-            android:id="@+id/decorListPiggybank"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_margin="8dp"
-            android:src="@drawable/ic_action_expand" />
 
         <TextView
             android:id="@+id/txtvPiggybanks"
@@ -71,22 +61,20 @@
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
             android:layout_toLeftOf="@id/imgAddNewAccount"
-            android:layout_toRightOf="@id/decorListPiggybank"
-            android:padding="8dp"
-            android:text="Piggybank$"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:paddingLeft="8dp"
+            android:text="Your Piggybank$"
+            android:textAllCaps="true"
+            android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/card_white" />
+
     </RelativeLayout>
 
     <ListView
         android:id="@+id/list_drawer"
         android:layout_width="240dp"
         android:layout_height="match_parent"
-        android:layout_marginLeft="8dp"
         android:choiceMode="singleChoice"
         android:divider="@drawable/abc_list_divider_holo_light"
-        android:dividerHeight="1px"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp" />
+        android:dividerHeight="1px" />
 
 </LinearLayout>

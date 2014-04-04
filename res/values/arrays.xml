@@ -45,6 +45,7 @@
         <item>#FFA8CABA</item>
     </array>
     <array name="icon_op_values_array">
+        <item>@drawable/ic_logo</item>
 	    <item>@drawable/ic_op_icon_candy</item>        
         <item>@drawable/ic_op_icon_car</item>
         <item>@drawable/ic_op_icon_coffee</item>        

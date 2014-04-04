@@ -1,5 +1,6 @@
 package com.coffeearmy.piggybank.data;
 
+import java.util.Date;
 import java.util.List;
 
 import android.database.Cursor;
@@ -23,6 +24,7 @@ public interface OperationsManagerInterface {
 	public void deleteOperation(Operation o);
 	public List<Operation> getOperationsList(Account account);
 	public List<Operation> getLastOperationList();	
+	public List<Operation> getLastOperationListbyDate(Date endDate);
 	public void deleteOperation(long operationID);
 	public Operation getOperation(long operationID);	
 	

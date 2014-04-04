@@ -5,23 +5,18 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
-import com.coffeearmy.piggybank.Account;
-import com.coffeearmy.piggybank.Operation;
-import com.coffeearmy.piggybank.R;
-import com.coffeearmy.piggybank.adapters.AccountListAdapter.ViewHolder;
-import com.coffeearmy.piggybank.auxiliar.Constant;
-import com.coffeearmy.piggybank.view.CustomCheckIcon;
-import com.coffeearmy.piggybank.view.CustomIcon;
-
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.coffeearmy.piggybank.Operation;
+import com.coffeearmy.piggybank.R;
+import com.coffeearmy.piggybank.auxiliar.Constant;
+import com.coffeearmy.piggybank.view.CustomIcon;
 
 /** Array Adapter for listing operations from one account  */
 public class OperationListAdapter extends ArrayAdapter<Operation> {
