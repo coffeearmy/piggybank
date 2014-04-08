@@ -53,18 +53,25 @@ public class AccountFragment extends Fragment {
 	private Account mAccount;
 	private long mAccountID;
 	private FragmentManager mFragmentManager;
-	//Static pattern for Fragments
-	public static AccountFragment newInstance(long ID) {
-		
-		AccountFragment f = new AccountFragment();
-	    
-		Bundle args = new Bundle();
-	    args.putLong(AccountFragment.ACCOUNT_ID, ID);
-	    f.setArguments(args);
-	    
-	    return f;
-	  }
 	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		setRetainInstance(true);
+		super.onCreate(savedInstanceState);
+		
+	}
+
+	// Static pattern for Fragments
+	public static AccountFragment newInstance(long ID) {
+
+		AccountFragment f = new AccountFragment();
+
+		Bundle args = new Bundle();
+		args.putLong(AccountFragment.ACCOUNT_ID, ID);
+		f.setArguments(args);
+
+		return f;
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -99,7 +106,7 @@ public class AccountFragment extends Fragment {
 		mTxtSwitchSaves.setFactory(new ViewFactory() {
 
 			public View makeView() {
-			
+
 				LayoutInflater inflater = LayoutInflater.from(PiggybankActivity
 						.getContext());
 
@@ -110,11 +117,12 @@ public class AccountFragment extends Fragment {
 
 			}
 		});
-		
-		//Set TextSwitch background 
-		int[] backgroundColor= StyleAPP.getBackgroundColor(getActivity(), mAccount.getIcon());
-			mTxtSwitchSaves.setBackgroundColor(backgroundColor[0]);
-		
+
+		// Set TextSwitch background
+		int[] backgroundColor = StyleAPP.getBackgroundColor(getActivity(),
+				mAccount.getIcon());
+		mTxtSwitchSaves.setBackgroundColor(backgroundColor[0]);
+
 		// /TODO TO BE DONE
 		// Declare the in and out animations and initialize them
 		// NINEOLDANIMATION
@@ -129,9 +137,19 @@ public class AccountFragment extends Fragment {
 
 		// Set currect Saves
 		mTxtSwitchSaves.setText(Constant.DF.format(currentMoney));
+		if (savedInstanceState != null) {
+			restoreState(savedInstanceState);
+		}
 
 		setHasOptionsMenu(true);
 		return (result);
+	}
+
+	private void restoreState(Bundle savedInstanceState) {
+		int selectedItem = savedInstanceState
+				.getInt(Constant.MENU_SELECTED_ITEM);
+		mOperationList.smoothScrollToPosition(selectedItem);
+		mOperationList.setSelection(selectedItem);
 	}
 
 	@Override
@@ -145,9 +163,17 @@ public class AccountFragment extends Fragment {
 	public void onResume() {
 		// Set Title in the action bar
 		getActivity().setTitle(operationHandler.getAccountName(mAccount));
-		Log.d(ACCOUNT_FRAGMENT_TAG, "register AccountFragment");
 		EventBus.getDefault().register(this);
 		super.onResume();
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+
+		outState.putInt(Constant.OPERATION_ITEM_LIST_SAVE,
+				mOperationList.getFirstVisiblePosition());
+		
 	}
 
 	/** EventBus method for read broadcasting events */
@@ -164,7 +190,7 @@ public class AccountFragment extends Fragment {
 
 		// Get Current saves
 		Double currentMoney = mAccount.getMoney();
-		
+
 		// Set currect Saves
 		mTxtSwitchSaves.setText(Constant.DF.format(currentMoney));
 		// Get total saves
@@ -180,8 +206,6 @@ public class AccountFragment extends Fragment {
 		inflater.inflate(R.menu.account_menu, menu);
 		super.onCreateOptionsMenu(menu, inflater);
 	}
-	
-	
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -198,63 +222,57 @@ public class AccountFragment extends Fragment {
 		return (super.onOptionsItemSelected(item));
 	}
 
+	
+
 	/** Show Dialog for a new Operation */
 	private void showNewOperationFragment() {
 
-		FragmentTransaction ft = getActivity().getSupportFragmentManager()
-				.beginTransaction();
-		Fragment prev = getActivity().getSupportFragmentManager()
-				.findFragmentByTag(AccountDialog.FRAGMENT_TAG);
-		if (prev != null) {
-			ft.remove(prev);
-		}
-		ft.addToBackStack(null);
-
+		FragmentTransaction ft = mFragmentManager.beginTransaction();
 		OperationDialog newFragment = OperationDialog.newInstance(0, null,
 				mAccount);
 		newFragment.show(ft, OperationDialog.FRAGMENT_TAG);
 
 	}
 
-	/** TOBEDONE In future, when onclick shows a another info. 
-	 * On Long click in a row of the list shows the operation dialog for edit */
+	/** Pass information with the row clicked for the operation dialog */
+	private void showEditOperationFragment(Operation item) {
+		FragmentTransaction ft = mFragmentManager.beginTransaction();
+		
+		DialogFragment newFragment = OperationDialog.newInstance(1, item,
+				mAccount);
+		newFragment.show(ft, OperationDialog.FRAGMENT_TAG);
+	}
+
+	/**
+	 * TOBEDONE In future, when onclick shows a another info. On Long click in a
+	 * row of the list shows the operation dialog for edit
+	 */
 	protected class OnOperationLongClick implements OnItemLongClickListener {
 
 		@Override
 		public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
 				int arg2, long arg3) {
+			mOperationList.setSelection(arg2);
 			showEditOperationFragment((Operation) arg0.getAdapter().getItem(
 					arg2));
-			mOperationList.setSelection(arg2);
+			
 			return false;
 		}
 
 	}
-	/** On  click in a row of the list shows the operation dialog for edit */
-	protected class OnOperationClick implements OnItemClickListener{
+
+	/** On click in a row of the list shows the operation dialog for edit */
+	protected class OnOperationClick implements OnItemClickListener {
 
 		@Override
 		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 				long arg3) {
+			mOperationList.setSelection(arg2);
 			showEditOperationFragment((Operation) arg0.getAdapter().getItem(
 					arg2));
-			mOperationList.setSelection(arg2);
+			
 		}
-		
-	}
-	
-	/** Pass information with the row clicked for the operation dialog */
-	private void showEditOperationFragment(Operation item) {
-		FragmentTransaction ft = mFragmentManager.beginTransaction();
-		Fragment prev = mFragmentManager
-				.findFragmentByTag(OperationDialog.FRAGMENT_TAG);
-		if (prev != null) {
-			ft.remove(prev);
-		}
-		ft.addToBackStack(null);
-		DialogFragment newFragment = OperationDialog.newInstance(1, item,
-				mAccount);
-		newFragment.show(ft, OperationDialog.FRAGMENT_TAG);
+
 	}
 
 }

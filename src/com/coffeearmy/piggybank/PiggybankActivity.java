@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -14,21 +15,42 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
+import com.coffeearmy.piggybank.auxiliar.FragmentNavigation;
 import com.coffeearmy.piggybank.data.OperationHandler;
 import com.coffeearmy.piggybank.fragments.AccountFragment;
 import com.coffeearmy.piggybank.fragments.DrawerMenu;
 import com.coffeearmy.piggybank.fragments.OverviewFragment;
 
 public class PiggybankActivity extends ActionBarActivity {
+
+	private static String SAVED_FRAGMENT = "saved_fragment";
 	// Context
 	private static Context context;
 	// UI elements
 	private static DrawerLayout mDrawerLayout = null;
 	private static ActionBarDrawerToggle mDrawerToggle = null;
+
+	/** Close the menu drawer */
+	public static void closeDrawer(String name) {
+		if (!(name == null)) {
+			mTitle = name;
+		}
+		mDrawerLayout.closeDrawer(mLayoutDrawer);
+
+	}
+
+	/** Returns activity context */
+	public static Context getContext() {
+		return context;
+	}
+
 	// Titles
 	private CharSequence mDrawerTitle;
 	private OperationHandler mOperationHandler;
+	private FragmentManager mFragmentManager;
+
 	private static CharSequence mTitle;
+
 	private static RelativeLayout mLayoutDrawer;
 
 	@Override
@@ -36,21 +58,13 @@ public class PiggybankActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		context = this;
-		// Add Operation handler Fragment
-		Fragment operation=getSupportFragmentManager().findFragmentByTag(OperationHandler.OPERATION_HANDLER_TAG);
-		if (operation == null) {
-			
-			mOperationHandler = new OperationHandler();
+		mFragmentManager = getSupportFragmentManager();
 
-			getSupportFragmentManager()
-					.beginTransaction()
-					.add(mOperationHandler,
-							OperationHandler.OPERATION_HANDLER_TAG).commit();
-		}
-		// Add Overview fragment
-		showOverviewFragment();
+		createFragments();
+
 		// Replace the layout inside the drawer layout with Drawer Menu fragment
 		configDrawerMenu();
+
 		// Set Title
 		mTitle = mDrawerTitle = getTitle();
 		// Get layout drawer
@@ -88,22 +102,6 @@ public class PiggybankActivity extends ActionBarActivity {
 
 	}
 
-	/**
-	 * Replace the layout fragment in the layout drawer with the DrawerMenu
-	 * Fragment
-	 */
-	private void configDrawerMenu() {
-
-		// Get the fragment instance
-		Fragment fragment = DrawerMenu.newInstance();
-
-		// Insert the fragment by replacing any existing fragment
-		getSupportFragmentManager()
-				.beginTransaction()
-				.replace(R.id.left_drawer_container, fragment,
-						DrawerMenu.FRAGMENT_TAG).commit();
-	}
-
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Show drawer menu
@@ -118,33 +116,56 @@ public class PiggybankActivity extends ActionBarActivity {
 		mDrawerToggle.syncState();
 	}
 
+	/**
+	 * Replace the layout fragment in the layout drawer with the DrawerMenu
+	 * Fragment
+	 */
+	private void configDrawerMenu() {
+
+		// Get the fragment instance
+		Fragment fragment = DrawerMenu.newInstance();
+
+		// Insert the fragment by replacing any existing fragment
+		mFragmentManager
+				.beginTransaction()
+				.replace(R.id.left_drawer_container, fragment,
+						DrawerMenu.FRAGMENT_TAG).commit();
+	}
+
+	private void configurateOperationHandler() {
+	
+		if(mOperationHandler==null&&null==mFragmentManager.findFragmentByTag(OperationHandler.OPERATION_HANDLER_TAG)){
+		mOperationHandler = OperationHandler.getInstance();
+		mFragmentManager.beginTransaction()
+				.add(mOperationHandler, OperationHandler.OPERATION_HANDLER_TAG)
+				.commit();
+		}
+	}
+
+	private void createFragments() {
+		// Add Overview fragment
+		showOverviewFragment();
+
+		// Operation Handler
+		configurateOperationHandler();
+	}
+
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 
-	/** Returns activity context */
-	public static Context getContext() {
-		return context;
-	}
-
-	/** Close the menu drawer */
-	public static void closeDrawer(String name) {
-		if (!(name == null)) {
-			mTitle = name;
-		}
-		mDrawerLayout.closeDrawer(mLayoutDrawer);
-
-	}
-
 	/** Show the Overview Fragment */
 	private void showOverviewFragment() {
+		//When the orientation changes we need to know if an account fragment is showing
+		if(null==mFragmentManager.findFragmentByTag(AccountFragment.ACCOUNT_FRAGMENT_TAG)){
 		Fragment fragment = OverviewFragment.newInstance();
 
-		getSupportFragmentManager()
+		mFragmentManager
 				.beginTransaction()
-				.add(R.id.content_frame, fragment,
+				.replace(R.id.content_frame, fragment,
 						OverviewFragment.FRAGMENT_TAG).commit();
+		}
 	}
 }

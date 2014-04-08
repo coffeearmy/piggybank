@@ -30,6 +30,7 @@ import com.coffeearmy.piggybank.PiggybankActivity;
 import com.coffeearmy.piggybank.R;
 import com.coffeearmy.piggybank.adapters.AccountListAdapter;
 import com.coffeearmy.piggybank.auxiliar.Constant;
+import com.coffeearmy.piggybank.auxiliar.FragmentNavigation;
 import com.coffeearmy.piggybank.data.OperationHandler;
 
 import de.greenrobot.event.EventBus;
@@ -40,12 +41,16 @@ public class DrawerMenu extends Fragment implements OnItemClickListener,
 
 	public static final String FRAGMENT_TAG = "drawer_menu_tag";
 	public static final Object NOTIFY_CHANGE_ACCOUNT_LIST = "notify_change_account_list";
+	private static final String SAVED_FRAGMENT = "saved_fragment";
 	private static DrawerMenu mDrawerMenu;
 	private ListView mDrawerList;
 	private FragmentManager mFragmentManager;
 	
 	private ImageView mImageAddPiggybanck;
 	private TextView mOverviewTextV;
+	private AccountDialog mAccountDialog;
+	private int mSelectedItem;
+	private Fragment mVisibleFragment;
 
 	// Singleton
 	public static DrawerMenu newInstance() {
@@ -98,9 +103,24 @@ public class DrawerMenu extends Fragment implements OnItemClickListener,
 
 		mDrawerList.setOnItemClickListener(this);
 		mDrawerList.setOnItemLongClickListener(this);
+		
+		if(savedInstanceState!=null){
+			restoreState(savedInstanceState);
+		}
+		
 		return result;
 	}
+	private void restoreState(Bundle savedInstanceState) {
+		mSelectedItem=savedInstanceState.getInt(Constant.MENU_SELECTED_ITEM);
+		mDrawerList.setItemChecked(mSelectedItem, true);
+	}
 
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+	
+		outState.putInt(Constant.MENU_SELECTED_ITEM, mSelectedItem);
+		super.onSaveInstanceState(outState);
+	}
 	
 
 	@Override
@@ -138,20 +158,23 @@ public class DrawerMenu extends Fragment implements OnItemClickListener,
 		((AccountListAdapter) mDrawerList.getAdapter())
 				.changeDataSet(accountsList);
 	}
-
-	/** Show the Dialog for create a new account */
-	private void showNewAccountFragment() {
-
+	
+	private void clearDialogFragment(){
 		FragmentTransaction ft = mFragmentManager.beginTransaction();
 		Fragment prev = mFragmentManager
 				.findFragmentByTag(AccountDialog.FRAGMENT_TAG);
 		if (prev != null) {
 			ft.remove(prev);
 		}
-		ft.addToBackStack(null);
+		ft.addToBackStack(null).commit();
+	}
 
-		DialogFragment newFragment = AccountDialog.newInstance(0, null);
-		newFragment.show(ft, AccountDialog.FRAGMENT_TAG);
+	/** Show the Dialog for create a new account */
+	private void showNewAccountFragment() {
+		FragmentTransaction ft = mFragmentManager.beginTransaction();
+		clearDialogFragment();
+		 mAccountDialog = AccountDialog.newInstance(0, null);
+		 mAccountDialog.show(ft, AccountDialog.FRAGMENT_TAG);
 
 	}
 
@@ -159,18 +182,13 @@ public class DrawerMenu extends Fragment implements OnItemClickListener,
 	private void showEditAccountFragment(Account account) {
 
 		FragmentTransaction ft = mFragmentManager.beginTransaction();
-		Fragment prev = mFragmentManager
-				.findFragmentByTag(AccountDialog.FRAGMENT_TAG);
-		if (prev != null) {
-			ft.remove(prev);
-		}
-		ft.addToBackStack(null);
+		clearDialogFragment();
 
 		// Create and show the dialog.
 		// First parameter of newIntance indicates if is a new account or an
 		// edit account dialog
-		DialogFragment newFragment = AccountDialog.newInstance(1, account);
-		newFragment.show(ft, AccountDialog.FRAGMENT_TAG);
+		mAccountDialog = AccountDialog.newInstance(1, account);
+		mAccountDialog.show(ft, AccountDialog.FRAGMENT_TAG);
 
 	}
 
@@ -187,7 +205,7 @@ public class DrawerMenu extends Fragment implements OnItemClickListener,
 		// Create a new fragment and specify the planet to show based on
 		// position
 		Fragment fragment = AccountFragment.newInstance(ID);
-
+		mVisibleFragment=fragment;
 		// Insert the fragment by replacing any existing fragment
 		mFragmentManager
 				.beginTransaction()
@@ -202,11 +220,12 @@ public class DrawerMenu extends Fragment implements OnItemClickListener,
 	/** Show the Overview fragment, and change the actionbar title to "Overview"*/
 	protected void showOverviewFragment() {
 		Fragment fragment = OverviewFragment.newInstance();
-		
-		mFragmentManager
-		.beginTransaction()
-		.replace(R.id.content_frame, fragment,
-				OverviewFragment.FRAGMENT_TAG).commit();
+		mVisibleFragment=fragment;
+		FragmentNavigation.showFragment(fragment, OverviewFragment.FRAGMENT_TAG, mFragmentManager);		
+//		mFragmentManager
+//		.beginTransaction()
+//		.replace(R.id.content_frame, fragment,
+//				OverviewFragment.FRAGMENT_TAG).commit();
 		PiggybankActivity.closeDrawer("Overview");
 	}
 
@@ -217,6 +236,7 @@ public class DrawerMenu extends Fragment implements OnItemClickListener,
 			long arg3) {
 		showEditAccountFragment((Account) arg0.getAdapter().getItem(arg2));
 		mDrawerList.setSelection(arg2);
+		mSelectedItem=arg2;
 		return false;
 	}
 
@@ -232,7 +252,8 @@ public class DrawerMenu extends Fragment implements OnItemClickListener,
 
 		// Show fragment clicked in the list
 		showAccountFragment((Long) row.getTag(R.id.account_id), position);
-
+		mDrawerList.setSelection(position);
+		mSelectedItem=position;
 		PiggybankActivity.closeDrawer(nameAccount);
 	}
 

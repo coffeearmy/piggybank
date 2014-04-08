@@ -1,15 +1,5 @@
 package com.coffeearmy.piggybank.fragments;
 
-import com.coffeearmy.piggybank.Account;
-import com.coffeearmy.piggybank.PiggybankActivity;
-import com.coffeearmy.piggybank.R;
-import com.coffeearmy.piggybank.auxiliar.Constant;
-import com.coffeearmy.piggybank.data.OperationHandler;
-import com.coffeearmy.piggybank.view.CustomCheckIcon;
-import com.coffeearmy.piggybank.view.CustomIcon;
-
-import de.greenrobot.event.EventBus;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -19,24 +9,26 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.GridLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
-import android.view.ViewStub;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
+
+import com.coffeearmy.piggybank.Account;
+import com.coffeearmy.piggybank.PiggybankActivity;
+import com.coffeearmy.piggybank.R;
+import com.coffeearmy.piggybank.auxiliar.Constant;
+import com.coffeearmy.piggybank.auxiliar.FragmentNavigation;
+import com.coffeearmy.piggybank.data.OperationHandler;
+import com.coffeearmy.piggybank.view.CustomCheckIcon;
+import com.coffeearmy.piggybank.view.CustomIcon;
+
+import de.greenrobot.event.EventBus;
 
 /** Dialog for create/edit/delete an Account */
 public class AccountDialog extends DialogFragment {
@@ -59,6 +51,8 @@ public class AccountDialog extends DialogFragment {
 
 	private FragmentManager mFragmentManager;
 
+	private boolean mIsEdit;
+
 	/** Returns an instance of the dialog */
 	public static AccountDialog newInstance(int mode, Account account) {
 		AccountDialog f = new AccountDialog();
@@ -79,9 +73,11 @@ public class AccountDialog extends DialogFragment {
 		LayoutInflater inflater = getActivity().getLayoutInflater();
 		View view = inflater.inflate(R.layout.new_account_dialog, null);
 		
+		//Is the dialog for edit a piggybank account
+		mIsEdit=getArguments()!=null?true:false;
+		
 		// Fragment Manager
 		mFragmentManager = getActivity().getSupportFragmentManager();
-		
 
 		mEdtAccountName = (EditText) view.findViewById(R.id.edtNameAccount);
 		mEdtInitialQuantity = (EditText) view
@@ -98,13 +94,13 @@ public class AccountDialog extends DialogFragment {
 		mRadioGroup.setOnCheckedChangeListener(new OnIconIsSelected());
 
 		mCustomIcon = (CustomIcon) view.findViewById(R.id.imgSelectTag);
-		
+
 		mCustomIcon.setOnClickListener(new OnClickSelectedTag());
 
 		AlertDialog.Builder alertBuilder = new AlertDialog.Builder(
 				getActivity());
-		// If there aren't arguments its a new acccount
-		if (getArguments() == null) {
+		// Set buttons to the dialog
+		if (!mIsEdit) {
 			alertBuilder.setPositiveButton("Add",
 					new OnSaveAccountClickListener()).setNegativeButton(
 					"No way", null);
@@ -112,12 +108,16 @@ public class AccountDialog extends DialogFragment {
 		} else {
 			alertBuilder.setPositiveButton("Update",
 					new OnEditAccountClickListener()).setNegativeButton(
-					"No way", null);
-			mEdtAccountName.setText(getArguments().getString(
-					Constant.ACCOUNT_NAME));
+					"No way", null);	
 			mEdtInitialQuantity.setVisibility(View.GONE);
-			mTxtvDeleteAccount
-					.setOnClickListener(new OnDeleteAccountClickListener());
+		}
+		//Fill the dialog fields if is needed
+		if(savedInstanceState!=null){
+			restoreState(savedInstanceState);
+		}else{
+			if(mIsEdit){
+				prepareEditDialog(getArguments());
+			}
 		}
 
 		alertBuilder.setView(view);
@@ -126,7 +126,33 @@ public class AccountDialog extends DialogFragment {
 
 		return customDialog;
 	}
+	
+	private void prepareEditDialog(Bundle arguments) {
+		mEdtAccountName.setText(arguments.getString(
+				Constant.ACCOUNT_NAME));		
+		mTxtvDeleteAccount
+				.setOnClickListener(new OnDeleteAccountClickListener());
+	}
 
+	private void restoreState(Bundle savedInstanceState) {		
+			mEdtAccountName.setText(savedInstanceState.getString(Constant.ACCOUNT_DIALOG_NAME_FIELD));
+			mEdtInitialQuantity.setText(savedInstanceState.getString(Constant.ACCOUNT_DIALOG_MONEY_FIELD));
+			mCustomIcon.setStyle(savedInstanceState.getInt(Constant.ACCOUNT_DIALOG_ICON_FIELD), -1);
+					
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle arg0) {
+		
+		//Dialog fields
+		arg0.putString(Constant.ACCOUNT_DIALOG_NAME_FIELD, isEmpty(mEdtAccountName)?"":mEdtAccountName.toString());
+		arg0.putString(Constant.ACCOUNT_DIALOG_MONEY_FIELD, isEmpty(mEdtInitialQuantity)?"":mEdtInitialQuantity.toString());
+		arg0.putInt(Constant.ACCOUNT_DIALOG_ICON_FIELD, mSelectedStyle);
+		
+		super.onSaveInstanceState(arg0);
+	}
+	
+	
 	/** Method reads the fields of the new account */
 	private void newAccount() {
 		String accountNameText = "";
@@ -196,23 +222,6 @@ public class AccountDialog extends DialogFragment {
 	private boolean isEmpty(EditText etText) {
 		return etText.getText().toString().trim().length() == 0;
 	}
-	
-	/** Show the Overview fragment, if an account is deleted"*/
-	protected void showOverviewFragment() {
-		Fragment fragment = OverviewFragment.newInstance();
-		
-		FragmentTransaction ft = mFragmentManager.beginTransaction();
-		Fragment prev = mFragmentManager
-				.findFragmentByTag(OverviewFragment.FRAGMENT_TAG);
-		if (prev != null) {
-			ft.attach(prev);
-		}else{			
-			ft.add(R.id.content_frame, fragment, OverviewFragment.FRAGMENT_TAG).commit();
-			//ft.addToBackStack(null).commit();
-		}
-		
-		PiggybankActivity.closeDrawer("Overview");
-	}
 
 	// Listeners
 	/** OnClick listener calls to new Account method */
@@ -242,11 +251,12 @@ public class AccountDialog extends DialogFragment {
 		public void onClick(View v) {
 			deleteAccountSendMenssage(getArguments().getLong(
 					Constant.ACCOUNT_ID));
-			showOverviewFragment();
+			//When delete an account show the overview Fragment
+			FragmentNavigation.showFragment(OverviewFragment.newInstance(),
+					OverviewFragment.FRAGMENT_TAG, mFragmentManager);
 			dismiss();
 		}
 	}
-	
 
 	/** OnClick listener calls to delete Account method */
 	protected class OnClickSelectedTag implements OnClickListener {

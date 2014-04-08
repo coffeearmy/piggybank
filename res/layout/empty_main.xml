@@ -70,24 +70,13 @@
             android:text="Long click for edit or delete the Operation/Piggybank"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
-        <ImageView
-            android:id="@+id/imgvAddEmpty"
+        <TextView
+            android:id="@+id/txtvAddEmpty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@id/imgvLongClick"
             android:layout_below="@id/txtvLongClickEmpty"
             android:layout_margin="8dp"
-            android:padding="8dp"
-            android:src="@drawable/ic_op_icon_ticket" />
-
-        <TextView
-            android:id="@+id/txtvAddEmpty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/txtvLongClickEmpty"
-            android:layout_alignTop="@+id/imgvAddEmpty"
-            android:layout_margin="8dp"
-            android:layout_toRightOf="@+id/imgvAddEmpty"
             android:text="Add  a new Operation/Piggybank"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 

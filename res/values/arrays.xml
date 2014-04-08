@@ -45,8 +45,8 @@
         <item>#FFA8CABA</item>
     </array>
     <array name="icon_op_values_array">
-        <item>@drawable/ic_logo</item>
-	    <item>@drawable/ic_op_icon_candy</item>        
+        <item>@drawable/piggy</item>
+	  <!--    <item>@drawable/ic_op_icon_candy</item>        
         <item>@drawable/ic_op_icon_car</item>
         <item>@drawable/ic_op_icon_coffee</item>        
         <item>@drawable/ic_op_icon_food</item>
@@ -58,7 +58,20 @@
         <item>@drawable/ic_op_icon_suitcase</item>        
         <item>@drawable/ic_op_icon_ticket</item>
          <item>@drawable/ic_op_icon_water</item>        
-         <item>@drawable/ic_op_icon_world</item>
+         <item>@drawable/ic_op_icon_world</item>-->
+         <item>@drawable/backpack_2</item>        
+        <item>@drawable/bill</item>
+        <item>@drawable/bookshelf</item>        
+        <item>@drawable/briefcase</item>
+        <item>@drawable/bus</item>        
+        <item>@drawable/calc</item>
+        <item>@drawable/candy</item>
+        <item>@drawable/car</item>        
+        <item>@drawable/donut</item>
+        <item>@drawable/drop</item>        
+        <item>@drawable/hamburger</item>
+         <item>@drawable/map2</item>        
+         <item>@drawable/medicine</item>
     </array>
     
 </resources>

@@ -34,12 +34,11 @@ public class OverviewFragment extends Fragment {
 	public static final String FRAGMENT_TAG = "overview_fragment_tag";
 	private static OverviewFragment mOverview;
 
-	///The static instance done for future functionality in the overview
+	// /The static instance done for future functionality in the overview
 	public static OverviewFragment newInstance() {
 
-	
-			mOverview = new OverviewFragment();
-		
+		mOverview = new OverviewFragment();
+
 		return mOverview;
 	}
 
@@ -47,7 +46,6 @@ public class OverviewFragment extends Fragment {
 	private List<Operation> mListOperations;
 	private FragmentManager mFragmentManager;
 
-	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -55,50 +53,55 @@ public class OverviewFragment extends Fragment {
 				false);
 		mFragmentManager = getActivity().getSupportFragmentManager();
 		mOperationHandler = OperationHandler.getInstance();
-		
+
 		View emptyView = inflater.inflate(R.layout.empty_main, null);
-		//SetUp emptyView 
-		Button emptyButton= (Button) emptyView.findViewById(R.id.btnEmpty);
+		// SetUp emptyView
+		Button emptyButton = (Button) emptyView.findViewById(R.id.btnEmpty);
 		emptyButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				showNewAccountFragment();
-				showOverviewFragment();
 			}
 		});
-		
+
 		mListOperations = mOperationHandler.getLastOperationList();
-		ListView listOverview= (ListView) result.findViewById(R.id.lstvOverview);
-		
-		//Set Empty view in the listview
-		((ViewGroup)listOverview.getParent()).addView(emptyView);
+		ListView listOverview = (ListView) result
+				.findViewById(R.id.lstvOverview);
+
+		// Set Empty view in the listview
+		((ViewGroup) listOverview.getParent()).addView(emptyView);
 		listOverview.setEmptyView(emptyView);
-		
-		//Set Header listview
-//		TextView titleView = new TextView(getActivity());
-//		titleView.setText("Last Operation");
-//		listOverview.addHeaderView(titleView);
-		//Calendar
-		//Get operation in last week
+
+		// Set Header listview
+		// TextView titleView = new TextView(getActivity());
+		// titleView.setText("Last Operation");
+		// listOverview.addHeaderView(titleView);
+		// Calendar
+		// Get operation in last week
 		Calendar calendar = Calendar.getInstance();
-		Date dateToday=calendar.getTime();
+		Date dateToday = calendar.getTime();
 		calendar.add(Calendar.DATE, -7);
-		Date dateLastWeek = calendar.getTime();		
-		
-		mListOperations = mOperationHandler.getLastOperationListbyDate(dateLastWeek);
-		
-		View headerOverviewView = inflater.inflate(R.layout.header_overview, null);
-		TextView datesRange=(TextView) headerOverviewView.findViewById(R.id.txtvOverviewDateHeader);
-		datesRange.setText("Today - "+Constant.dateFormatMMMDD.format(dateLastWeek));
-		
-		//Add Overview 
+		Date dateLastWeek = calendar.getTime();
+
+		mListOperations = mOperationHandler
+				.getLastOperationListbyDate(dateLastWeek);
+
+		View headerOverviewView = inflater.inflate(R.layout.header_overview,
+				null);
+		TextView datesRange = (TextView) headerOverviewView
+				.findViewById(R.id.txtvOverviewDateHeader);
+		datesRange.setText("Today - "
+				+ Constant.dateFormatMMMDD.format(dateLastWeek));
+
+		// Add Overview
 		listOverview.addHeaderView(headerOverviewView);
+
+		listOverview.setAdapter(new OverviewOperationListAdapter(
+				PiggybankActivity.getContext(),
+				R.layout.overview_operation_row, 1, mListOperations));
 		
-		listOverview.setAdapter(
-				new OverviewOperationListAdapter(
-						PiggybankActivity.getContext(),
-						R.layout.overview_operation_row, 1, mListOperations));
-	
+		setRetainInstance(true);
+
 		return result;
 	}
 
@@ -133,29 +136,9 @@ public class OverviewFragment extends Fragment {
 	//
 	//
 	// }
-//	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//		super.onCreateOptionsMenu(menu, inflater);
-//	}
-	
-	
-
-	/** Show the Overview fragment, and change the actionbar title to "Overview"*/
-	protected void showOverviewFragment() {
-		Fragment fragment = OverviewFragment.newInstance();
-		
-		FragmentTransaction ft = mFragmentManager.beginTransaction();
-		Fragment prev = mFragmentManager
-				.findFragmentByTag(OverviewFragment.FRAGMENT_TAG);
-		if (prev != null) {
-			ft.remove(prev);
-		}
-		ft.addToBackStack(null);
-		ft.replace(R.id.content_frame, fragment, OverviewFragment.FRAGMENT_TAG).commit();
-		
-		PiggybankActivity.closeDrawer("Overview");
-	}
-	
-	
+	// public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+	// super.onCreateOptionsMenu(menu, inflater);
+	// }
 
 	/** Show the Dialog for create a new account */
 	private void showNewAccountFragment() {

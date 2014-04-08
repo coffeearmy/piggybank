@@ -2,6 +2,7 @@ package com.coffeearmy.piggybank.auxiliar;
 
 import java.text.DecimalFormat;
 import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -9,6 +10,7 @@ import java.util.Locale;
 
 /** Constants used in EventBus and extras*/
 public class Constant {
+	
 	public static String ACCOUNT_ID="account_id";
 	public static String ACCOUNT_NAME="account_name";
 	public static String ACCOUNT_MONEY="account_money";
@@ -25,9 +27,22 @@ public class Constant {
 	public static String OPERATION_MONEY_PREVIOUS="operation_money_previous";
 	
 	//Number formatter
-	public static DecimalFormat DF = new DecimalFormat("#");	
+	public static NumberFormat DF = NumberFormat.getInstance();	
+	//public static 
 	
 	//Date formatter
 	public static DateFormat dateFormatMMMDD= SimpleDateFormat.getDateInstance(DateFormat.LONG, Locale.getDefault());
+	
+	
+	//Used in save states
+	public static final String ACCOUNT_DIALOG_IS_SHOW = "account_dialog_show";
+	public static final String ACCOUNT_DIALOG_NAME_FIELD = "account_dialog_show_name";
+	public static final String ACCOUNT_DIALOG_MONEY_FIELD = "account_dialog_show_money";
+	public static final String ACCOUNT_DIALOG_ICON_FIELD = "account_dialog_show_icon";
+	public static final String MENU_SELECTED_ITEM = "menu_selected_item";
+	public static final String OPERATION_ITEM_LIST_SAVE = "operation_item_list_save";
+	public static final String OPERATION_DIALOG_SIGN_SAVE = "operation_dialog_sign_save";
+	public static final String OPERATION_DIALOG_ICON_SAVE = "operation_dialog_icon_save";
+	public static final String OPERATION_DIALOG_MONEY_SAVE = "operation_dialog_money_save";
 
 }

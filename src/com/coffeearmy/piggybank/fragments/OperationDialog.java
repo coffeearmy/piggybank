@@ -1,5 +1,7 @@
 package com.coffeearmy.piggybank.fragments;
 
+import java.text.ParseException;
+
 import com.coffeearmy.piggybank.Account;
 import com.coffeearmy.piggybank.Operation;
 import com.coffeearmy.piggybank.R;
@@ -51,6 +53,9 @@ public class OperationDialog extends DialogFragment {
 	private double mMoneyForEdit;
 	private CustomIcon mCustomIcon;
 	private int mSelectedBG;
+	
+	public OperationDialog() {}
+
 
 	/** Returns an instance of the dialog */
 	public static OperationDialog newInstance(int mode, Operation item,
@@ -74,7 +79,8 @@ public class OperationDialog extends DialogFragment {
 		f.setArguments(args);
 		return f;
 	}
-
+	
+	
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -123,8 +129,33 @@ public class OperationDialog extends DialogFragment {
 		alertBuilder.setView(view);
 		Dialog customDialog = alertBuilder.create();
 		customDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		if(savedInstanceState!=null){
+			restoreState(savedInstanceState);
+		}
 
 		return customDialog;
+	}
+	
+	private void restoreState(Bundle savedInstanceState) {
+		mToggleSign.setChecked(savedInstanceState.getBoolean(Constant.OPERATION_DIALOG_SIGN_SAVE));
+		mEdtMoneyOperation.setText(savedInstanceState.getString(Constant.OPERATION_DIALOG_MONEY_SAVE));
+		mCustomIcon.setStyle(mSelectedBG, savedInstanceState.getInt(Constant.OPERATION_DIALOG_ICON_SAVE));
+		
+	}
+	@Override
+	 public void onDestroyView() {
+	     if (getDialog() != null && getRetainInstance())
+	         getDialog().setDismissMessage(null);
+	         super.onDestroyView();
+	 }
+
+	@Override
+	public void onSaveInstanceState(Bundle arg0) {
+		
+		arg0.putBoolean(Constant.OPERATION_DIALOG_SIGN_SAVE, mToggleSign.isChecked());
+		arg0.putString(Constant.OPERATION_DIALOG_MONEY_SAVE, isEmpty(mEdtMoneyOperation)?"":mEdtMoneyOperation.getText().toString());
+		arg0.putInt(Constant.OPERATION_DIALOG_ICON_SAVE, mSelectedIcon);
+		super.onSaveInstanceState(arg0);
 	}
 
 	private void setDialogReadyForEdit() {
@@ -154,7 +185,14 @@ public class OperationDialog extends DialogFragment {
 
 		if (!isEmpty(mEdtMoneyOperation)) {
 			amountfromEditText = mEdtMoneyOperation.getText().toString();
-			cuantityFromStringInputEdit = Double.parseDouble(amountfromEditText);
+			try {
+				Number numericParse = Constant.DF.parse(amountfromEditText);
+				cuantityFromStringInputEdit= Double.valueOf(numericParse.toString());
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		}
 
 		

@@ -6,6 +6,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.StateListDrawable;
@@ -15,6 +16,7 @@ import android.util.AttributeSet;
 import android.widget.RadioButton;
 
 import com.coffeearmy.piggybank.R;
+import com.coffeearmy.piggybank.auxiliar.StyleAPP;
 
 /**
  * Custom Radio Button for choosing the Icon for the account/operation The View
@@ -55,13 +57,18 @@ public class CustomCheckIcon extends RadioButton {
 	}
 
 	private Drawable createCustomBackground() {
-
-		mIconBased = getIconBase();
-		Drawable stateChecked = getCheckedIcon();
-		Drawable stateUncheked = mIconBased;
+		
+		Drawable stateUncheked;		
+		
 		if (mIconID > -1) {
-			stateUncheked = setIcon(mIconBased);
+			//Its a Operation Icon without BG
+			stateUncheked = getIcon(mIconID);
+		}else{
+			//Its a Piggybank Icon without Icon
+			stateUncheked = getIconBase();
 		}
+		Drawable stateChecked = getCheckedDrawableIcon(stateUncheked);
+		
 		StateListDrawable stateList = new StateListDrawable();
 		stateList.addState(new int[] { android.R.attr.state_checked },
 				stateChecked);
@@ -71,40 +78,20 @@ public class CustomCheckIcon extends RadioButton {
 		return stateList;
 	}
 
-	private Drawable setIcon(Drawable mIconBased2) {
-		Drawable[] layerDrawable = new Drawable[] { mIconBased,
-				getIcon(mIconID) };
-		LayerDrawable iconLayer = new LayerDrawable(layerDrawable);
-
-		return iconLayer;
-	}
 
 	private Drawable getIconBase() {
 		
-		if(mIconID==-1){
-		GradientDrawable gradient = new GradientDrawable(ORIENTATION,
-				new int[] { mBeginColor, mEndColor });
-		gradient.setShape(GradientDrawable.OVAL);
-		return gradient;
-		}else{
-			return getIconBGEmpty();
-		}
-
-		
+			OvalShape ovalShape = new OvalShape();		
+			ShapeDrawable sd = new ShapeDrawable(ovalShape);
+			sd.getPaint().setColor(mBeginColor);
+		return sd;
+			
 	}
+	
 
-	private Drawable getIconBGEmpty() {
-		
-		GradientDrawable gradient = new GradientDrawable(ORIENTATION,
-				new int[] { Color.WHITE, Color.WHITE });
-		gradient.setShape(GradientDrawable.OVAL);
-		gradient.setStroke(3, Color.DKGRAY);
-		return gradient;
-	}
-
-	private Drawable getCheckedIcon() {
+	private Drawable getCheckedDrawableIcon(Drawable selection) {
 		// mIconBased
-		Drawable[] layerDrawable = new Drawable[] { mIconBased,
+		Drawable[] layerDrawable = new Drawable[] { selection,
 				mResources.getDrawable(R.drawable.abc_ic_cab_done_holo_dark) };
 		LayerDrawable iconLayer = new LayerDrawable(layerDrawable);
 
@@ -120,33 +107,12 @@ public class CustomCheckIcon extends RadioButton {
 
 	/** Retrieve the colors associated with style @param i */
 	public int[] getBackgroundColor(Context c, int i) {
-
-		// Array with the array id for every buttom
-		TypedArray arrayBackgroundColors = mResources
-				.obtainTypedArray(R.array.icon_bg_values_array);
-		// Get array id
-		int backgroundColors = arrayBackgroundColors.getResourceId(i,
-				R.array.icon_BG_1);
-		TypedArray colorArray = mResources.obtainTypedArray(backgroundColors);
-		int[] colors = new int[] { colorArray.getColor(0, Color.CYAN),
-				colorArray.getColor(1, Color.CYAN), };
-
-		arrayBackgroundColors.recycle();
-		colorArray.recycle();
-
-		return colors;
+		return StyleAPP.getBackgroundColor(getContext(), i);
 	}
 
 	/** Retrieve the icon associated with style @param i */
 	public Drawable getIcon(int i) {
-
-		TypedArray arrayBackgroundIcon = mResources
-				.obtainTypedArray(R.array.icon_op_values_array);
-		Drawable customIcon = arrayBackgroundIcon.getDrawable(i);
-
-		arrayBackgroundIcon.recycle();
-
-		return customIcon;
+		return StyleAPP.getIcon(getContext(), i);
 	}
 
 	public int getIconSelected() {
