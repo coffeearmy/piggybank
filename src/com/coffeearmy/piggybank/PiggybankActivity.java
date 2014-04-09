@@ -23,9 +23,6 @@ import com.coffeearmy.piggybank.fragments.OverviewFragment;
 
 public class PiggybankActivity extends ActionBarActivity {
 
-	private static String SAVED_FRAGMENT = "saved_fragment";
-	// Context
-	private static Context context;
 	// UI elements
 	private static DrawerLayout mDrawerLayout = null;
 	private static ActionBarDrawerToggle mDrawerToggle = null;
@@ -36,12 +33,6 @@ public class PiggybankActivity extends ActionBarActivity {
 			mTitle = name;
 		}
 		mDrawerLayout.closeDrawer(mLayoutDrawer);
-
-	}
-
-	/** Returns activity context */
-	public static Context getContext() {
-		return context;
 	}
 
 	// Titles
@@ -57,7 +48,7 @@ public class PiggybankActivity extends ActionBarActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		context = this;
+
 		mFragmentManager = getSupportFragmentManager();
 
 		createFragments();
@@ -133,12 +124,15 @@ public class PiggybankActivity extends ActionBarActivity {
 	}
 
 	private void configurateOperationHandler() {
-	
-		if(mOperationHandler==null&&null==mFragmentManager.findFragmentByTag(OperationHandler.OPERATION_HANDLER_TAG)){
-		mOperationHandler = OperationHandler.getInstance();
-		mFragmentManager.beginTransaction()
-				.add(mOperationHandler, OperationHandler.OPERATION_HANDLER_TAG)
-				.commit();
+
+		if (mOperationHandler == null
+				&& null == mFragmentManager
+						.findFragmentByTag(OperationHandler.OPERATION_HANDLER_TAG)) {
+			mOperationHandler = OperationHandler.getInstance(this);
+			mFragmentManager
+					.beginTransaction()
+					.add(mOperationHandler,
+							OperationHandler.OPERATION_HANDLER_TAG).commit();
 		}
 	}
 
@@ -158,14 +152,16 @@ public class PiggybankActivity extends ActionBarActivity {
 
 	/** Show the Overview Fragment */
 	private void showOverviewFragment() {
-		//When the orientation changes we need to know if an account fragment is showing
-		if(null==mFragmentManager.findFragmentByTag(AccountFragment.ACCOUNT_FRAGMENT_TAG)){
-		Fragment fragment = OverviewFragment.newInstance();
+		// When the orientation changes we need to know if an account fragment
+		// is showing
+		if (null == mFragmentManager
+				.findFragmentByTag(AccountFragment.ACCOUNT_FRAGMENT_TAG)) {
+			Fragment fragment = OverviewFragment.newInstance();
 
-		mFragmentManager
-				.beginTransaction()
-				.replace(R.id.content_frame, fragment,
-						OverviewFragment.FRAGMENT_TAG).commit();
+			mFragmentManager
+					.beginTransaction()
+					.replace(R.id.content_frame, fragment,
+							OverviewFragment.FRAGMENT_TAG).commit();
 		}
 	}
 }

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -31,18 +32,17 @@ public class OperationHandler extends Fragment {
 
 	//We use an interface for communicate with the BD with Green DAO
 	//If in the future we can use another DAO or external server
-	OperationsManagerInterface dataProvider;
-
-	public OperationHandler(){
-		dataProvider = new OperationSQLProvider();
-	} 
+	static OperationsManagerInterface dataProvider;
+    public OperationHandler() {}
+    
+	 
 	
 	//Singleton pattern
 	private static OperationHandler mOperationHandler;
-	public static OperationHandler getInstance() {
+	public static OperationHandler getInstance(Context c) {
 		if (mOperationHandler == null) {
 			mOperationHandler = new OperationHandler();
-			
+			dataProvider = new OperationSQLProvider(c);
 		}
 			return mOperationHandler;
 		

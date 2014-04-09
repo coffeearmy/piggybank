@@ -3,6 +3,7 @@ package com.coffeearmy.piggybank.data;
 import java.util.Date;
 import java.util.List;
 
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.coffeearmy.piggybank.Account;
@@ -25,9 +26,9 @@ public class OperationSQLProvider implements OperationsManagerInterface {
 	private AccountDao accountDao;
 	private OperationDao operationDao;
 
-	public OperationSQLProvider() {
+	public OperationSQLProvider(Context c) {
 		//Create Schema 
-		DevOpenHelper helper = new DaoMaster.DevOpenHelper(PiggybankActivity.getContext(), "notes-db-v2", null);
+		DevOpenHelper helper = new DaoMaster.DevOpenHelper(c, "notes-db-v2", null);
         db = helper.getWritableDatabase();
         daoMaster = new DaoMaster(db);
         daoSession = daoMaster.newSession();

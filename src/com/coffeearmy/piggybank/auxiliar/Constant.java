@@ -44,5 +44,10 @@ public class Constant {
 	public static final String OPERATION_DIALOG_SIGN_SAVE = "operation_dialog_sign_save";
 	public static final String OPERATION_DIALOG_ICON_SAVE = "operation_dialog_icon_save";
 	public static final String OPERATION_DIALOG_MONEY_SAVE = "operation_dialog_money_save";
+	
+	//Loaders
+	public static final int LOADER_OVERVIEW_ID = 1;
+	public static final int LOADER_ACCOUNT_ID = 2;
+	public static final int LOADER_OPERATION_ID = 0;
 
 }

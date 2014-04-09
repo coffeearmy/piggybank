@@ -7,9 +7,12 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.app.NotificationCompat.Style;
+import android.support.v4.content.Loader;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.util.Log;
 import android.view.Gravity;
@@ -19,6 +22,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
@@ -36,11 +41,12 @@ import com.coffeearmy.piggybank.adapters.OperationListAdapter;
 import com.coffeearmy.piggybank.auxiliar.Constant;
 import com.coffeearmy.piggybank.auxiliar.StyleAPP;
 import com.coffeearmy.piggybank.data.OperationHandler;
+import com.coffeearmy.piggybank.data.OperationLoader;
 import com.coffeearmy.piggybank.view.FontFitTextView;
 
 import de.greenrobot.event.EventBus;
 
-public class AccountFragment extends Fragment {
+public class AccountFragment extends Fragment implements LoaderCallbacks<List<Operation>>{
 
 	public static final String ACCOUNT_ID = "account_ID";
 	public static final Object NOTIFY_CHANGE_OPERATION_LIST = "notify_change_operation_list";
@@ -48,11 +54,13 @@ public class AccountFragment extends Fragment {
 
 	private ListView mOperationList;
 	private TextSwitcher mTxtSwitchSaves;
-	private OperationHandler operationHandler;
+	private OperationHandler mOperationHandler;
 
 	private Account mAccount;
 	private long mAccountID;
 	private FragmentManager mFragmentManager;
+	private FragmentActivity mContext;
+	private OperationListAdapter mListAdapter;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -78,37 +86,48 @@ public class AccountFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View result = inflater.inflate(R.layout.account_layout, container,
 				false);
-
+		mContext=getActivity();
 		mFragmentManager = getActivity().getSupportFragmentManager();
-		operationHandler = OperationHandler.getInstance();
-		Bundle bundle = this.getArguments();
-		mAccountID = bundle.getLong(ACCOUNT_ID);
-		// Get list items
-		mAccount = operationHandler.getAccount(mAccountID);
-		// Get Current saves
-		Double currentMoney = mAccount.getMoney();
-		// Get total saves
-		List<Operation> results = operationHandler
-				.getOperationsFromAccountList(mAccount);
+		mOperationHandler = OperationHandler.getInstance(mContext);
+
+		
 		// Setup List
 		mOperationList = (ListView) result.findViewById(R.id.lstTransaction);
 		// Set Adapter
+		mListAdapter=new OperationListAdapter(mContext, android.R.layout.simple_list_item_1, 1,
+				new ArrayList<Operation>());
 		mOperationList
-				.setAdapter(new OperationListAdapter(PiggybankActivity
-						.getContext(), android.R.layout.simple_list_item_1, 1,
-						results));
+				.setAdapter(mListAdapter);
 		// Set onLongclick listener
 		mOperationList.setOnItemClickListener(new OnOperationClick());
 		// Set total saves
 		mTxtSwitchSaves = (TextSwitcher) result
 				.findViewById(R.id.txtSavesTotal);
+		//Set Header with total money of the account
+				setHeaderFragment();
+		
+		if (savedInstanceState != null) {
+			restoreState(savedInstanceState);
+		}
+		//Init loader for retrieve the operations in the account
+		getLoaderManager().initLoader(Constant.LOADER_OPERATION_ID, null, this).forceLoad();
 
+		setHasOptionsMenu(true);
+		return (result);
+	}
+
+	private void setHeaderFragment() {
+		Bundle bundle = this.getArguments();
+		mAccountID = bundle.getLong(ACCOUNT_ID);
+		// Get list items
+		mAccount = mOperationHandler.getAccount(mAccountID);
+		// Get Current saves
+		Double currentMoney = mAccount.getMoney();
 		mTxtSwitchSaves.setFactory(new ViewFactory() {
 
 			public View makeView() {
 
-				LayoutInflater inflater = LayoutInflater.from(PiggybankActivity
-						.getContext());
+				LayoutInflater inflater = LayoutInflater.from(mContext);
 
 				TextView textView = (TextView) inflater.inflate(
 						R.layout.text_view_switcher, null);
@@ -123,26 +142,20 @@ public class AccountFragment extends Fragment {
 				mAccount.getIcon());
 		mTxtSwitchSaves.setBackgroundColor(backgroundColor[0]);
 
-		// /TODO TO BE DONE
+		
 		// Declare the in and out animations and initialize them
-		// NINEOLDANIMATION
-		// Animation in =
-		// AnimationUtils.loadAnimation(this,android.R.anim.slide_in_left);
-		// Animation out =
-		// AnimationUtils.loadAnimation(this,android.R.anim.slide_out_right);
-		//
-		// // set the animation type of textSwitcher
-		// mTxtSwitchSaves.setInAnimation(in);
-		// mTxtSwitchSaves.setOutAnimation(out);
+		 Animation in =
+		 AnimationUtils.loadAnimation(mContext,R.anim.top_to_down_anim);
+		 Animation out =
+		 AnimationUtils.loadAnimation(mContext,android.R.anim.fade_out);
+		
+		 // set the animation type of textSwitcher
+		 mTxtSwitchSaves.setInAnimation(in);
+		 mTxtSwitchSaves.setOutAnimation(out);
 
 		// Set currect Saves
 		mTxtSwitchSaves.setText(Constant.DF.format(currentMoney));
-		if (savedInstanceState != null) {
-			restoreState(savedInstanceState);
-		}
-
-		setHasOptionsMenu(true);
-		return (result);
+		
 	}
 
 	private void restoreState(Bundle savedInstanceState) {
@@ -162,18 +175,18 @@ public class AccountFragment extends Fragment {
 	@Override
 	public void onResume() {
 		// Set Title in the action bar
-		getActivity().setTitle(operationHandler.getAccountName(mAccount));
+		getActivity().setTitle(mOperationHandler.getAccountName(mAccount));
 		EventBus.getDefault().register(this);
 		super.onResume();
 	}
-
+	
+	/** Save the last viewed position of the list */
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 
 		outState.putInt(Constant.OPERATION_ITEM_LIST_SAVE,
-				mOperationList.getFirstVisiblePosition());
-		
+				mOperationList.getFirstVisiblePosition());		
 	}
 
 	/** EventBus method for read broadcasting events */
@@ -186,19 +199,13 @@ public class AccountFragment extends Fragment {
 	/** Method for change the adapter in the operation list */
 	public void listChanged() {
 		// Get list items
-		mAccount = operationHandler.getAccount(mAccountID);
-
+		mAccount = mOperationHandler.getAccount(mAccountID);
 		// Get Current saves
 		Double currentMoney = mAccount.getMoney();
-
 		// Set currect Saves
 		mTxtSwitchSaves.setText(Constant.DF.format(currentMoney));
-		// Get total saves
-		List<Operation> operationList = new ArrayList<Operation>();
-		operationList.addAll(operationHandler
-				.getOperationsFromAccountList(mAccount));
-		((OperationListAdapter) mOperationList.getAdapter())
-				.changeDataSet(operationList);
+		
+		getLoaderManager().initLoader(Constant.LOADER_OPERATION_ID, null, this).forceLoad();
 	}
 
 	@Override
@@ -222,8 +229,11 @@ public class AccountFragment extends Fragment {
 		return (super.onOptionsItemSelected(item));
 	}
 
-	
-
+	/*
+	 * 
+	 * Methods for navigation between fragments
+	 * 
+	 */
 	/** Show Dialog for a new Operation */
 	private void showNewOperationFragment() {
 
@@ -232,7 +242,7 @@ public class AccountFragment extends Fragment {
 				mAccount);
 		newFragment.show(ft, OperationDialog.FRAGMENT_TAG);
 
-	}
+	}	
 
 	/** Pass information with the row clicked for the operation dialog */
 	private void showEditOperationFragment(Operation item) {
@@ -243,24 +253,11 @@ public class AccountFragment extends Fragment {
 		newFragment.show(ft, OperationDialog.FRAGMENT_TAG);
 	}
 
-	/**
-	 * TOBEDONE In future, when onclick shows a another info. On Long click in a
-	 * row of the list shows the operation dialog for edit
-	 */
-	protected class OnOperationLongClick implements OnItemLongClickListener {
-
-		@Override
-		public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-				int arg2, long arg3) {
-			mOperationList.setSelection(arg2);
-			showEditOperationFragment((Operation) arg0.getAdapter().getItem(
-					arg2));
-			
-			return false;
-		}
-
-	}
-
+	/*
+	 * 
+	 *  Listeners
+	 * 
+	 */	
 	/** On click in a row of the list shows the operation dialog for edit */
 	protected class OnOperationClick implements OnItemClickListener {
 
@@ -269,10 +266,29 @@ public class AccountFragment extends Fragment {
 				long arg3) {
 			mOperationList.setSelection(arg2);
 			showEditOperationFragment((Operation) arg0.getAdapter().getItem(
-					arg2));
-			
+					arg2));			
 		}
+	}
+	
+	/*
+	 * 
+	 * Loader Callbaks
+	 * @see android.support.v4.app.LoaderManager.LoaderCallbacks#onCreateLoader(int, android.os.Bundle)
+	 */
+	@Override
+	public Loader<List<Operation>> onCreateLoader(int arg0, Bundle arg1) {
+		return new OperationLoader(mContext,mAccount);
+	}
 
+	@Override
+	public void onLoadFinished(Loader<List<Operation>> arg0,
+			List<Operation> arg1) {
+		mListAdapter.changeDataSet(arg1);		
+	}
+
+	@Override
+	public void onLoaderReset(Loader<List<Operation>> arg0) {
+		mListAdapter.changeDataSet(new ArrayList<Operation>());		
 	}
 
 }

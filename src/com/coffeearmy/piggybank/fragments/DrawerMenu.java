@@ -1,5 +1,6 @@
 package com.coffeearmy.piggybank.fragments;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
@@ -7,8 +8,11 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,17 +35,18 @@ import com.coffeearmy.piggybank.R;
 import com.coffeearmy.piggybank.adapters.AccountListAdapter;
 import com.coffeearmy.piggybank.auxiliar.Constant;
 import com.coffeearmy.piggybank.auxiliar.FragmentNavigation;
+import com.coffeearmy.piggybank.data.AccountLoader;
 import com.coffeearmy.piggybank.data.OperationHandler;
 
 import de.greenrobot.event.EventBus;
 
 /** Fragment with the logic of the Drawer menu */
 public class DrawerMenu extends Fragment implements OnItemClickListener,
-		OnItemLongClickListener {
+		OnItemLongClickListener, LoaderCallbacks<List<Account>>{
 
 	public static final String FRAGMENT_TAG = "drawer_menu_tag";
 	public static final Object NOTIFY_CHANGE_ACCOUNT_LIST = "notify_change_account_list";
-	private static final String SAVED_FRAGMENT = "saved_fragment";
+
 	private static DrawerMenu mDrawerMenu;
 	private ListView mDrawerList;
 	private FragmentManager mFragmentManager;
@@ -50,7 +55,9 @@ public class DrawerMenu extends Fragment implements OnItemClickListener,
 	private TextView mOverviewTextV;
 	private AccountDialog mAccountDialog;
 	private int mSelectedItem;
-	private Fragment mVisibleFragment;
+
+	private FragmentActivity mContext;
+	private AccountListAdapter mAdapterList;
 
 	// Singleton
 	public static DrawerMenu newInstance() {
@@ -68,19 +75,18 @@ public class DrawerMenu extends Fragment implements OnItemClickListener,
 			Bundle savedInstanceState) {
 		View result = inflater.inflate(R.layout.drawer_menu_layout, container,
 				false);
-
+		mContext=getActivity();
 		// Fragment Manager
 		mFragmentManager = getActivity().getSupportFragmentManager();
 		// Get List drawer
 		mDrawerList = (ListView) result.findViewById(R.id.list_drawer);
 
-		// Get initial list of accounts
-		OperationHandler opHandler = OperationHandler.getInstance();
-		List<Account> accountsCursor = opHandler.getAccountsList();
-
+		
+		List<Account> accountsCursor = new ArrayList<Account>();
+		mAdapterList=new AccountListAdapter(getActivity(),
+				R.layout.drawer_row, 0, accountsCursor);
 		// Set adapter
-		mDrawerList.setAdapter(new AccountListAdapter(getActivity(),
-				R.layout.drawer_row, 0, accountsCursor));
+		mDrawerList.setAdapter(mAdapterList);
 		// Set onclicklistener		
 		mImageAddPiggybanck = (ImageView) result.findViewById(R.id.imgAddNewAccount);
 		mImageAddPiggybanck.setOnClickListener(new OnClickListener() {			
@@ -107,6 +113,7 @@ public class DrawerMenu extends Fragment implements OnItemClickListener,
 		if(savedInstanceState!=null){
 			restoreState(savedInstanceState);
 		}
+		getLoaderManager().initLoader(Constant.LOADER_ACCOUNT_ID, null, this).forceLoad();
 		
 		return result;
 	}
@@ -153,12 +160,15 @@ public class DrawerMenu extends Fragment implements OnItemClickListener,
 
 	/** Method for change the data from the account list */
 	public void listChanged() {
-		OperationHandler opHandler = OperationHandler.getInstance();
-		List<Account> accountsList = opHandler.getAccountsList();
-		((AccountListAdapter) mDrawerList.getAdapter())
-				.changeDataSet(accountsList);
+		getLoaderManager().initLoader(Constant.LOADER_ACCOUNT_ID, null, this).forceLoad();		
 	}
 	
+	
+	/*
+	 * 
+	 * Navigation between fragments
+	 * 
+	 */
 	private void clearDialogFragment(){
 		FragmentTransaction ft = mFragmentManager.beginTransaction();
 		Fragment prev = mFragmentManager
@@ -193,25 +203,17 @@ public class DrawerMenu extends Fragment implements OnItemClickListener,
 	}
 
 	/**
-	 * Show the detail Fragment with the data from the account
-	 * 
-	 * @param ID
-	 *            , id from the account
-	 * @param position
-	 *            , position from the list for set the item checked
+	 * Show the detail Fragment with the data from the account	 
+	 * @param ID , id from the account
+	 * @param position , position from the list for set the item checked
 	 * */
 	private void showAccountFragment(Long ID, int position) {
 
-		// Create a new fragment and specify the planet to show based on
-		// position
 		Fragment fragment = AccountFragment.newInstance(ID);
-		mVisibleFragment=fragment;
+		
 		// Insert the fragment by replacing any existing fragment
-		mFragmentManager
-				.beginTransaction()
-				.replace(R.id.content_frame, fragment,
-						AccountFragment.ACCOUNT_FRAGMENT_TAG).commit();
-
+		FragmentNavigation.showFragment(fragment, AccountFragment.ACCOUNT_FRAGMENT_TAG, mFragmentManager);	
+		
 		// Highlight the selected item, update the title, and close the drawer
 		mDrawerList.setItemChecked(position, true);
 		PiggybankActivity.closeDrawer(null);
@@ -220,16 +222,16 @@ public class DrawerMenu extends Fragment implements OnItemClickListener,
 	/** Show the Overview fragment, and change the actionbar title to "Overview"*/
 	protected void showOverviewFragment() {
 		Fragment fragment = OverviewFragment.newInstance();
-		mVisibleFragment=fragment;
 		FragmentNavigation.showFragment(fragment, OverviewFragment.FRAGMENT_TAG, mFragmentManager);		
-//		mFragmentManager
-//		.beginTransaction()
-//		.replace(R.id.content_frame, fragment,
-//				OverviewFragment.FRAGMENT_TAG).commit();
+
 		PiggybankActivity.closeDrawer("Overview");
 	}
 
-	// Listeners
+	/*
+	 * 
+	 * Listeners
+	 * 
+	 */
 	/** ON long click in the list shows the account dialog for edit or detele it */
 	@Override
 	public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2,
@@ -255,6 +257,26 @@ public class DrawerMenu extends Fragment implements OnItemClickListener,
 		mDrawerList.setSelection(position);
 		mSelectedItem=position;
 		PiggybankActivity.closeDrawer(nameAccount);
+	}
+	
+	/*
+	 * 
+	 *  Loader Interface 
+	 * 
+	 */
+	@Override
+	public Loader<List<Account>> onCreateLoader(int arg0, Bundle arg1) {
+		return new AccountLoader(getActivity());
+	}
+
+	@Override
+	public void onLoadFinished(Loader<List<Account>> arg0, List<Account> arg1) {
+		mAdapterList.changeDataSet(arg1);		
+	}
+
+	@Override
+	public void onLoaderReset(Loader<List<Account>> arg0) {
+		mAdapterList.changeDataSet(new ArrayList<Account>());
 	}
 
 }
