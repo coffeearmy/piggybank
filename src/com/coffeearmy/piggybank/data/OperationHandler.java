@@ -15,6 +15,7 @@ import com.coffeearmy.piggybank.Account;
 import com.coffeearmy.piggybank.AccountDao;
 import com.coffeearmy.piggybank.Operation;
 import com.coffeearmy.piggybank.auxiliar.Constant;
+import com.coffeearmy.piggybank.auxiliar.FragmentNavigation;
 import com.coffeearmy.piggybank.fragments.AccountDialog;
 import com.coffeearmy.piggybank.fragments.AccountFragment;
 import com.coffeearmy.piggybank.fragments.DrawerMenu;
@@ -134,6 +135,10 @@ public class OperationHandler extends Fragment {
 
 		dataProvider.newAccount(newAccount);
 		storeOperation(newAccount, initialQuantity, true, 0);
+		//This is not the ideal place, but for now...
+		//When a new account is inserted the fragment with the account is showed
+		AccountFragment fragment = AccountFragment.newInstance(newAccount.getId());
+		FragmentNavigation.showFragment(fragment, AccountFragment.ACCOUNT_FRAGMENT_TAG, getFragmentManager());
 	}
 	
 	/** Edit Account from Intent*/

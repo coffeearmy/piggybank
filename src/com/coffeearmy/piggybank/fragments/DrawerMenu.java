@@ -58,6 +58,7 @@ public class DrawerMenu extends Fragment implements OnItemClickListener,
 
 	private FragmentActivity mContext;
 	private AccountListAdapter mAdapterList;
+	private LayoutInflater mInflater;
 
 	// Singleton
 	public static DrawerMenu newInstance() {
@@ -73,6 +74,7 @@ public class DrawerMenu extends Fragment implements OnItemClickListener,
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		mInflater=inflater;
 		View result = inflater.inflate(R.layout.drawer_menu_layout, container,
 				false);
 		mContext=getActivity();
@@ -87,6 +89,9 @@ public class DrawerMenu extends Fragment implements OnItemClickListener,
 				R.layout.drawer_row, 0, accountsCursor);
 		// Set adapter
 		mDrawerList.setAdapter(mAdapterList);
+		//Set Empty View
+		setEmptyView();
+		
 		// Set onclicklistener		
 		mImageAddPiggybanck = (ImageView) result.findViewById(R.id.imgAddNewAccount);
 		mImageAddPiggybanck.setOnClickListener(new OnClickListener() {			
@@ -116,6 +121,16 @@ public class DrawerMenu extends Fragment implements OnItemClickListener,
 		getLoaderManager().initLoader(Constant.LOADER_ACCOUNT_ID, null, this).forceLoad();
 		
 		return result;
+	}
+
+	private void setEmptyView() {
+		View emptyView = mInflater.inflate(R.layout.empty_view_operation, null);
+		TextView emptyText = (TextView) emptyView.findViewById(R.id.decoEmptyOp1);
+		emptyText.setText("No piggybanks :(");
+		TextView emptyText2 = (TextView) emptyView.findViewById(R.id.decoEmptyOp2);
+		emptyText2.setText("Add a new piggybank");
+		((ViewGroup) mDrawerList.getParent()).addView(emptyView);
+		mDrawerList.setEmptyView(emptyView);
 	}
 	private void restoreState(Bundle savedInstanceState) {
 		mSelectedItem=savedInstanceState.getInt(Constant.MENU_SELECTED_ITEM);

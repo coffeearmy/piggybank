@@ -22,12 +22,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
@@ -61,6 +63,7 @@ public class AccountFragment extends Fragment implements LoaderCallbacks<List<Op
 	private FragmentManager mFragmentManager;
 	private FragmentActivity mContext;
 	private OperationListAdapter mListAdapter;
+	private LayoutInflater mInflater;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -84,7 +87,8 @@ public class AccountFragment extends Fragment implements LoaderCallbacks<List<Op
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View result = inflater.inflate(R.layout.account_layout, container,
+		mInflater=inflater;
+		View result = mInflater.inflate(R.layout.account_layout, container,
 				false);
 		mContext=getActivity();
 		mFragmentManager = getActivity().getSupportFragmentManager();
@@ -111,9 +115,16 @@ public class AccountFragment extends Fragment implements LoaderCallbacks<List<Op
 		}
 		//Init loader for retrieve the operations in the account
 		getLoaderManager().initLoader(Constant.LOADER_OPERATION_ID, null, this).forceLoad();
-
+		setEmptyView();
 		setHasOptionsMenu(true);
 		return (result);
+	}
+
+	private void setEmptyView() {
+		View emptyView = mInflater.inflate(R.layout.empty_view_operation, null);
+		// SetUp emptyView		
+		((ViewGroup) mOperationList.getParent()).addView(emptyView);
+		mOperationList.setEmptyView(emptyView);		
 	}
 
 	private void setHeaderFragment() {
@@ -160,7 +171,7 @@ public class AccountFragment extends Fragment implements LoaderCallbacks<List<Op
 
 	private void restoreState(Bundle savedInstanceState) {
 		int selectedItem = savedInstanceState
-				.getInt(Constant.MENU_SELECTED_ITEM);
+				.getInt(Constant.OPERATION_ITEM_LIST_SAVE);
 		mOperationList.smoothScrollToPosition(selectedItem);
 		mOperationList.setSelection(selectedItem);
 	}

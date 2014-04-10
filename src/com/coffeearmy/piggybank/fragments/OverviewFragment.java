@@ -38,7 +38,6 @@ public class OverviewFragment extends Fragment implements LoaderCallbacks<List<O
 	public static final String FRAGMENT_TAG = "overview_fragment_tag";
 	
 	private static OverviewFragment mOverview;
-	private OperationHandler mOperationHandler;
 	private List<Operation> mListOperations;
 	private FragmentManager mFragmentManager;
 	private LayoutInflater mInflater;
@@ -46,6 +45,9 @@ public class OverviewFragment extends Fragment implements LoaderCallbacks<List<O
 	private Date mDateLastWeek;
 
 	private FragmentActivity mContext;
+	private ListView mListOverview;
+
+	private View mEmptyView;
 
 	// /The static instance done for future functionality in the overview
 	public static OverviewFragment newInstance() {
@@ -62,41 +64,54 @@ public class OverviewFragment extends Fragment implements LoaderCallbacks<List<O
 		View result = inflater.inflate(R.layout.overview_layout, container,
 				false);
 		mFragmentManager = getActivity().getSupportFragmentManager();
-		mOperationHandler = OperationHandler.getInstance(mContext);
+		
 		mListOperations= new ArrayList<Operation>();
 
 //		mListOperations = mOperationHandler
 //				.getLastOperationListbyDate(dateLastWeek);
-		ListView listOverview = (ListView) result
+		 mListOverview = (ListView) result
 				.findViewById(R.id.lstvOverview);
 		///TODO set the empty list for a first time the user enter
 		// Set Empty view in the listview
-		//setEmptyView(listOverview);
+		setEmptyView(mListOverview);
 
 		// Set Header listview
-		setHeaderView(listOverview);
+		setHeaderView(mListOverview);
 		mListAdapter=new OverviewOperationListAdapter(
 				mContext,
 				R.layout.overview_operation_row, 1, mListOperations);
-		listOverview.setAdapter(mListAdapter);
+		mListOverview.setAdapter(mListAdapter);
 		
 		getLoaderManager().initLoader(Constant.LOADER_OVERVIEW_ID, null, this).forceLoad();
+		if(savedInstanceState!=null){
+			restoreState(savedInstanceState);
+		}
 
 		return result;
 	}
 	///TODO set the empty list for a first time the user enter
 	private void setEmptyView(ListView listOverview) {
-		View emptyView = mInflater.inflate(R.layout.empty_main, null);
+		 mEmptyView = mInflater.inflate(R.layout.empty_overview, null);
 		// SetUp emptyView
-		Button emptyButton = (Button) emptyView.findViewById(R.id.btnEmpty);
-		emptyButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				showNewAccountFragment();
-			}
-		});
-		((ViewGroup) listOverview.getParent()).addView(emptyView);
-		listOverview.setEmptyView(emptyView);
+//		Button emptyButton = (Button) emptyView.findViewById(R.id.btnEmpty);
+//		emptyButton.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				showNewAccountFragment();
+//			}
+//		});
+		//((ViewGroup) listOverview.getParent()).addView(emptyView);
+		//listOverview.setEmptyView(emptyView);
+		listOverview.addFooterView(mEmptyView);
+		mEmptyView.setVisibility(View.GONE);
+	}
+	public void setFooterViewVisibility(int size){
+		if(size==0){
+			mEmptyView.setVisibility(View.VISIBLE);
+		}else{
+			mEmptyView.setVisibility(View.GONE);
+		}
+		
 	}
 
 	private void setHeaderView(ListView listOverview) {
@@ -144,6 +159,22 @@ public class OverviewFragment extends Fragment implements LoaderCallbacks<List<O
 		newFragment.show(ft, AccountDialog.FRAGMENT_TAG);
 
 	}
+	/** Save the last viewed position of the list */
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+
+		outState.putInt(Constant.OVERVIEW_ITEM_LIST_SAVE,
+				mListOverview.getFirstVisiblePosition());		
+	}
+	
+	private void restoreState(Bundle savedInstanceState) {
+		int selectedItem = savedInstanceState
+				.getInt(Constant.OVERVIEW_ITEM_LIST_SAVE);
+		mListOverview.smoothScrollToPosition(selectedItem);
+		mListOverview.setSelection(selectedItem);
+	}
+
 
 	@Override
 	public Loader<List<Operation>> onCreateLoader(int arg0, Bundle arg1) {
@@ -153,6 +184,7 @@ public class OverviewFragment extends Fragment implements LoaderCallbacks<List<O
 	@Override
 	public void onLoadFinished(Loader<List<Operation>> arg0,
 			List<Operation> arg1) {
+		setFooterViewVisibility(arg1.size());
 		mListAdapter.changeDataSet(arg1);		
 	}
 
