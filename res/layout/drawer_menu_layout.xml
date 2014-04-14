@@ -25,7 +25,7 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/imgListOverview"
             android:padding="8dp"
-            android:text="Overview"
+            android:text="@string/overview_title_bar"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@android:color/black" />
     </RelativeLayout>
@@ -54,7 +54,7 @@
             android:layout_gravity="center_vertical"
             android:layout_toLeftOf="@id/imgAddNewAccount"
             android:paddingLeft="8dp"
-            android:text="Your Piggybank$"
+            android:text="@string/drawer_menu_title_piggybanks"
             android:textAllCaps="true"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/card_white" />

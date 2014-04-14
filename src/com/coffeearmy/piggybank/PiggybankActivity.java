@@ -1,5 +1,8 @@
 package com.coffeearmy.piggybank;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -12,10 +15,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.coffeearmy.piggybank.auxiliar.Constant;
 import com.coffeearmy.piggybank.data.OperationHandler;
 import com.coffeearmy.piggybank.fragments.AccountFragment;
 import com.coffeearmy.piggybank.fragments.DrawerMenu;
 import com.coffeearmy.piggybank.fragments.OverviewFragment;
+import com.coffeearmy.piggybank.fragments.WelcomeFragment;
 
 public class PiggybankActivity extends ActionBarActivity {
 
@@ -88,6 +93,10 @@ public class PiggybankActivity extends ActionBarActivity {
 		getSupportActionBar().setHomeButtonEnabled(true);
 
 	}
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -133,13 +142,35 @@ public class PiggybankActivity extends ActionBarActivity {
 	}
 
 	private void createFragments() {
-		// Add Overview fragment
-		showOverviewFragment();
-
+		
+		if(isFirstTimeOpeningApp()){
+			showWelcomeFragment();
+		}else{// Add Overview fragment
+			showOverviewFragment();			
+		}
+		//Set the preference and the welcome view dont show again 
+		storeFirstTimeOpeningApp();
 		// Operation Handler
 		configurateOperationHandler();
+	
 	}
 
+	private void showWelcomeFragment() {
+		
+			Fragment fragment = new WelcomeFragment();
+
+			mFragmentManager
+					.beginTransaction()
+					.replace(R.id.content_frame, fragment,
+							WelcomeFragment.FRAGMENT_TAG).commit();
+		
+	}
+	private boolean isFirstTimeOpeningApp() {
+		SharedPreferences sharedPreferences = getSharedPreferences(Constant.SHARED_PREF, Context.MODE_PRIVATE);
+		Boolean firstTime=sharedPreferences.getBoolean(Constant.SHARED_PREF_FIRST_TIME, true);		
+		return firstTime;
+	}
+	
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
@@ -159,5 +190,14 @@ public class PiggybankActivity extends ActionBarActivity {
 					.replace(R.id.content_frame, fragment,
 							OverviewFragment.FRAGMENT_TAG).commit();
 		}
+	}
+	
+	private void storeFirstTimeOpeningApp() {
+		SharedPreferences sharedPreferences = getSharedPreferences(Constant.SHARED_PREF, Context.MODE_PRIVATE);
+		
+		Editor editor = sharedPreferences.edit();
+		editor.putBoolean(Constant.SHARED_PREF_FIRST_TIME, false);
+	    editor.commit();
+
 	}
 }

@@ -92,19 +92,10 @@ public class OverviewFragment extends Fragment implements LoaderCallbacks<List<O
 	///TODO set the empty list for a first time the user enter
 	private void setEmptyView(ListView listOverview) {
 		 mEmptyView = mInflater.inflate(R.layout.empty_overview, null);
-		// SetUp emptyView
-//		Button emptyButton = (Button) emptyView.findViewById(R.id.btnEmpty);
-//		emptyButton.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				showNewAccountFragment();
-//			}
-//		});
-		//((ViewGroup) listOverview.getParent()).addView(emptyView);
-		//listOverview.setEmptyView(emptyView);
 		listOverview.addFooterView(mEmptyView);
 		mEmptyView.setVisibility(View.GONE);
 	}
+	
 	public void setFooterViewVisibility(int size){
 		if(size==0){
 			mEmptyView.setVisibility(View.VISIBLE);

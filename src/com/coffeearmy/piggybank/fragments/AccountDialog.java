@@ -101,14 +101,14 @@ public class AccountDialog extends DialogFragment {
 				getActivity());
 		// Set buttons to the dialog
 		if (!mIsEdit) {
-			alertBuilder.setPositiveButton("Add",
+			alertBuilder.setPositiveButton(R.string.add,
 					new OnSaveAccountClickListener()).setNegativeButton(
-					"No way", null);
+					R.string.cancel, null);
 			mTxtvDeleteAccount.setVisibility(View.GONE);
 		} else {
-			alertBuilder.setPositiveButton("Update",
+			alertBuilder.setPositiveButton(R.string.edit,
 					new OnEditAccountClickListener()).setNegativeButton(
-					"No way", null);	
+							R.string.cancel, null);	
 			mEdtInitialQuantity.setVisibility(View.GONE);
 		}
 		//Fill the dialog fields if is needed

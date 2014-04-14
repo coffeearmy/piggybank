@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	
+
     <string name="app_name">PiggyBank</string>
     <string name="hello">Hello Piggybank!</string>
     <string name="action_settings">Settings</string>
@@ -11,14 +11,35 @@
     <string name="account_label">Piggybank name</string>
     <string name="label_type_account">Select an icon</string>
     <string name="Quantity_account">Initial Quantity</string>
-     <string name="view_tag">view_tag</string>
-     <string name="account_menu_add">Add</string>
-     <string name="account_menu_subtract">Subtract</string>
-     <string name="account_menu_filter">Filter</string>
-     <string name="account_menu_settings">Settings</string>
-     <item name="account_id" type="id">1</item>
-     <item name="operation_id" type="id">2</item>
-     <string name="ic_delete">Delete</string>
-   
+    <string name="view_tag">view_tag</string>
+    <string name="account_menu_add">Add</string>
+    <string name="account_menu_subtract">Subtract</string>
+    <string name="account_menu_filter">Filter</string>
+    <string name="account_menu_settings">Settings</string>
+
+    <item name="account_id" type="id">1</item>
+    <item name="operation_id" type="id">2</item>
+
+    <string name="ic_delete">Delete</string>
+    <string name="overview_title_bar">Overview</string>
+    <string name="empty_overview_title">No operations found last week</string>
+    <string name="header_overview_title">Last week operations</string>
+    <string name="empty_operation_title">No operations? :(</string>
+    <string name="empty_operation_subtitle">Add a new operation</string>
+    <string name="drawer_menu_title_piggybanks">Your Piggybank$</string>
+    <string name="first_time_title_view">Welcome to PiggyBank</string>
+    <string name="first_time_title_view_land">Welcome to\nPiggyBank</string>
+    <string name="first_time_button">Create a PiggyBank</string>
+    <string name="first_time_button_land">Create a \nPiggyBank</string>
+    <string name="first_time_title_help">How to use Piggybank:</string>
+    <string name="first_time_first_step">Open the menu to navigate between Piggybanks and the Overview</string>
+    <string name="first_time_second_step">Tap to add new Operation/Piggybank</string>
+    <string name="first_time_third_step">Hold for edit or delete a Piggybank</string>
+    <string name="first_time_fourth_step">Tap an operation for edit or delete it.</string>
+    <string name="content_desc_logo">Logo of Piggybank</string>
+     <string name="add">Add</string>
+     <string name="edit">Edit</string>
+     <string name="cancel">Cancel</string>
+    
 
 </resources>

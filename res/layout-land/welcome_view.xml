@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/Holo_bg_grey" >
+
+    <RelativeLayout
+        android:id="@+id/containerLayoutEmpty"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_toRightOf="@+id/lblEmpty"
+        android:addStatesFromChildren="true"
+        android:background="@color/card_white"
+        android:padding="8dp" >
+
+        <TextView
+            android:id="@+id/txtvInstrucctions"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:padding="8dp"
+            android:text="@string/first_time_title_help"
+            android:textAllCaps="true"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/Holo_letter_grey" />
+        
+        <ImageView
+            android:id="@+id/imgfirststep"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_below="@id/txtvInstrucctions"
+            android:layout_margin="8dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_drawer" />
+
+         <TextView
+             android:id="@+id/decor_first_step"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_below="@id/txtvInstrucctions"
+             android:text="@string/first_time_first_step"
+             android:layout_toRightOf="@id/imgfirststep"
+             android:layout_margin="8dp"
+             android:textAppearance="?android:attr/textAppearanceSmall" />
+
+         <ImageView
+             android:id="@+id/imgSecondStep"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_below="@id/decor_first_step"
+             android:layout_margin="8dp"
+             android:src="@drawable/ic_action_add_black" />
+
+         <TextView
+             android:id="@+id/decor_second_step"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_alignLeft="@id/decor_first_step"
+             android:layout_below="@id/decor_first_step"
+             android:layout_marginBottom="8dp"
+             android:layout_marginRight="8dp"
+             android:layout_marginTop="8dp"
+             android:layout_toRightOf="@id/imgSecondStep"
+             android:text="@string/first_time_second_step"
+             android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <ImageView
+            android:id="@+id/imgvLongClick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/decor_second_step"
+            android:layout_marginLeft="8dp"
+            android:src="@drawable/ic_action_hold" />
+
+        <TextView
+            android:id="@+id/decor_third_step"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/decor_second_step"
+            android:layout_below="@id/decor_second_step"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_toRightOf="@id/imgvLongClick"
+            android:text="@string/first_time_third_step"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <ImageView
+            android:id="@+id/imgTap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+                android:layout_below="@id/decor_third_step"
+            android:layout_margin="8dp"
+            android:src="@drawable/ic_action_tap" />
+
+        <TextView
+            android:id="@+id/decor_fourth_step"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/decor_third_step"
+            android:text="@string/first_time_fourth_step"
+             android:layout_toRightOf="@id/imgTap"
+             android:layout_margin="8dp"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/lblEmpty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/imgLogoEmpty"
+        android:layout_below="@+id/imgLogoEmpty"
+        android:text="@string/first_time_title_view_land"
+        android:textAllCaps="false"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/btnEmpty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/lblEmpty"
+        android:layout_below="@+id/lblEmpty"
+        android:text="@string/first_time_button_land" />
+
+    <ImageView
+        android:id="@+id/imgLogoEmpty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_margin="8dp"
+        android:layout_marginLeft="74dp"
+        android:contentDescription="@string/content_desc_logo"
+        android:src="@drawable/ic_logo" />
+
+</RelativeLayout>

@@ -51,5 +51,9 @@ public class Constant {
 	public static final int LOADER_ACCOUNT_ID = 2;
 	public static final int LOADER_OPERATION_ID = 0;
 	
+	//SharedPref
+	public static final String SHARED_PREF = "shared_pref";
+	public static final String SHARED_PREF_FIRST_TIME = "shared_pref_first_time";
+	
 
 }

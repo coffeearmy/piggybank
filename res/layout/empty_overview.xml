@@ -9,17 +9,18 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
-        android:text="No operations last week"
+        android:text="@string/empty_overview_title"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/Holo_letter_grey" />
 
     <ImageView
-        android:id="@+id/imageView1"
+        android:id="@+id/imgfirststep"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/decorEmptyOverview"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="8dp"
+        android:contentDescription="@string/content_desc_logo"
         android:src="@drawable/ic_logo" />
 
 </RelativeLayout>

@@ -13,7 +13,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:layout_toLeftOf="@+id/decorEmptyOpImg"
-        android:text="No operations? :("
+        android:text="@string/empty_operation_title"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
@@ -23,7 +23,7 @@
         android:layout_alignLeft="@+id/decoEmptyOp1"
         android:layout_below="@+id/decoEmptyOp1"
         android:background="@color/Holo_green"
-        android:text="Add a new operation"
+        android:text="@string/empty_operation_subtitle"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <ImageView

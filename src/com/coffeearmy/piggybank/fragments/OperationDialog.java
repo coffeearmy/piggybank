@@ -115,14 +115,14 @@ public class OperationDialog extends DialogFragment {
 		if (getArguments().size() == 1) {
 			alertBuilder
 
-			.setPositiveButton("Add", new OnSaveOperationClickListener())
-					.setNegativeButton("No way", null);
+			.setPositiveButton(R.string.add, new OnSaveOperationClickListener())
+					.setNegativeButton(R.string.cancel, null);
 
 		} else {
 			alertBuilder
 
-			.setPositiveButton("Update", new OnEditOperationClickListener())
-					.setNegativeButton("No way", null);
+			.setPositiveButton(R.string.edit, new OnEditOperationClickListener())
+					.setNegativeButton(R.string.cancel, null);
 			setDialogReadyForEdit();
 		}
 
